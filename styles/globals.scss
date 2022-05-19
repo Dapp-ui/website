@@ -1,0 +1,292 @@
+html {
+  background-color: #fafafa;
+}
+
+body {
+  background: none !important;
+}
+
+// Flex
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+// by our rules we use specific rules
+.flex-1 {
+  flex: 1 1 0;
+}
+
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.flex-none {
+  flex: none;
+}
+
+
+// Align items
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.items-baseline {
+  align-items: baseline;
+}
+
+.items-stretch {
+  align-items: stretch;
+}
+
+
+// Align self
+
+.self-auto {
+  align-self: auto;
+}
+
+.self-start {
+  align-self: flex-start;
+}
+
+.self-end {
+  align-self: flex-end;
+}
+
+.self-center {
+  align-self: center;
+}
+
+.self-stretch {
+  align-self: stretch;
+}
+
+
+// Justify
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+
+// Flex direction
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-col-reverse {
+  flex-direction: column-reverse;
+}
+
+
+// Typography
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.leading-0 {
+  line-height: 0;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+
+// Display
+
+.block {
+  display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.flex {
+  display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+
+// Position
+
+.inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+
+// Overflow
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+// Sizing
+
+.w-full {
+  width: 100%;
+}
+
+.w-3\/12 {
+  width: 25%;
+}
+
+.w-6\/12 {
+  width: 50%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.min-w-1 {
+  min-width: 1px;
+}
+
+
+// Background color
+
+
+// Border color
+
+
+// Cursor
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-move {
+  cursor: move;
+}
+
+.cursor-help {
+  cursor: help;
+}
+
+
+// Radius
+
+.radius-5 {
+  border-radius: 5px;
+}
+
+
+// Custom ============================================================ /
+
+.shadow {
+  box-shadow: rgba(0, 0, 0, 0.15) 0 2px 6px;
+}
+
+.max-w-336 {
+  max-width: 336px;
+}
+
+.max-w-752 {
+  max-width: 752px;
+}
+
+.hide-empty:empty {
+  display: none;
+}
+
+// Box
+
+$indentMap: (
+  'p' : ('padding'),
+  'px': ('padding-left', 'padding-right'),
+  'py': ('padding-top', 'padding-bottom'),
+  'pt': ('padding-top'),
+  'pb': ('padding-bottom'),
+  'pr': ('padding-right'),
+  'pl': ('padding-left'),
+  'm' : ('margin'),
+  'mx': ('margin-left', 'margin-right'),
+  'my': ('margin-top', 'margin-bottom'),
+  'mt': ('margin-top'),
+  'mb': ('margin-bottom'),
+  'mr': ('margin-right'),
+  'ml': ('margin-left'),
+);
+
+$autoKeys: ('mt', 'mr', 'mb', 'ml', 'mx', 'my');
+
+$indentSizes: (4, 6, 8, 12, 16, 20, 24, 32, 36, 40, 48, 56);
+
+@each $key, $cssProps in $indentMap {
+  @each $size in $indentSizes {
+
+    .#{$key}-#{$size} {
+      @each $cssProp in $cssProps {
+        #{$cssProp}: #{$size}px;
+      }
+    }
+  }
+}
+
+@each $key in $autoKeys {
+  .#{$key}-auto {
+    @each $cssProp in map-get($indentMap, $key) {
+      #{$cssProp}: auto;
+    }
+  }
+}
