@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useConnectWallet } from '@web3-onboard/react'
 
 import { Box, TextField, Button } from '@mui/material'
 
@@ -10,6 +11,8 @@ type Step3Props = {
 }
 
 const Step3: React.FC<Step3Props> = ({ onBack }) => {
+  const [ { wallet }, connect ] = useConnectWallet()
+
   const [ name, setName ] = useState('')
   const [ nameError, setNameError ] = useState(null)
   const [ symbol, setSymbol ] = useState('')
@@ -69,16 +72,32 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
             onChange={handleSymbolChange}
           />
         </Box>
-        <Box mt={2}>
-          <Button
-            variant="contained"
-            size="medium"
-            type="submit"
-            fullWidth
-          >
-            Create Index
-          </Button>
-        </Box>
+        {
+          Boolean(wallet) ? (
+            <Box mt={2}>
+              <Button
+                variant="contained"
+                size="medium"
+                type="submit"
+                fullWidth
+              >
+                Create Index
+              </Button>
+            </Box>
+          ) : (
+            <Box mt={2}>
+              <Button
+                variant="contained"
+                size="medium"
+                type="submit"
+                fullWidth
+                onClick={() => connect({})}
+              >
+                Connect wallet
+              </Button>
+            </Box>
+          )
+        }
         <Box mt={2}>
           <Button
             variant="text"

@@ -1,29 +1,31 @@
 import React from 'react'
+import Link from 'next/link'
 
-import Toolbar from '@mui/material/Toolbar'
-import Container from '@mui/material/Container'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
+import { Box, Container, Typography } from '@mui/material'
+
+import ConnectButton from './components/ConnectButton/ConnectButton'
 
 
 const Header: React.FC = () => {
 
   return (
     <Container maxWidth="lg">
-      <Toolbar disableGutters>
-        <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          noWrap
-          sx={{ flex: 1 }}
-        >
-          IndexClub
-        </Typography>
-        <Button variant="outlined" size="small">
-          Connect Wallet
-        </Button>
-      </Toolbar>
+      <Box pt={2} pb={2} className="flex justify-between">
+        <Link href="/">
+          <a>
+            <Typography
+              component="h2"
+              variant="h5"
+              color="inherit"
+              noWrap
+              sx={{ flex: 1 }}
+            >
+              IndexClub
+            </Typography>
+          </a>
+        </Link>
+        <ConnectButton />
+      </Box>
     </Container>
   )
 }

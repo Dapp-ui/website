@@ -22,7 +22,8 @@
     "isolatedModules": true,
     "paths": {
       "layouts/*": [ "src/layouts/*" ],
-      "hooks": [ "src/hooks" ]
+      "hooks": [ "src/hooks" ],
+      "helpers": [ "src/helpers" ]
     }
   },
   "include": [
