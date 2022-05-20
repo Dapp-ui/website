@@ -1,0 +1,50 @@
+.root {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  padding: 0 16px;
+  border-radius: 8px;
+  box-shadow: none;
+  color: $gray-80;
+  background-color: $gray-5;
+  border: 1px solid $gray-5;
+  @include basic-transition();
+
+  @include placeholder {
+    color: $gray-40;
+  }
+
+  &:hover,
+  &:focus {
+    @include field-light-shadow;
+  }
+
+  &.errored {
+    border-color: $accent-red-90 !important;
+  }
+
+  &.disabled {
+    color: $gray-20;
+
+    @include placeholder {
+      color: $gray-20;
+    }
+  }
+
+  .size-36 & {
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .size-44 & {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .size-56 & {
+    height: 56px;
+    font-size: 16px;
+  }
+}

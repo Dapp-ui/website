@@ -1,0 +1,102 @@
+html,
+body {
+  height: 100%;
+  color: #141d29;
+  font-weight: 400;
+  font-size: 14px;
+  font-family: 'Eina 01', sans-serif;
+}
+
+html {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+
+  &.body-scroll-frozen {
+    overflow: hidden;
+  }
+}
+
+a,
+input,
+textarea,
+button,
+select {
+
+  &:focus {
+    outline: none;
+  }
+}
+
+input,
+textarea,
+button,
+select {
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+
+legend,
+fieldset {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+input,
+textarea,
+select {
+
+  &:-webkit-autofill,
+  &:focus {
+    background-color: #fff;
+  }
+
+  // Hides autocomplete in Safari
+  &::-webkit-contacts-auto-fill-button {
+    visibility: hidden;
+  }
+
+  // Chrome autofilled background color
+  &:-webkit-autofill,
+  &:-webkit-autofill:focus {
+    -webkit-box-shadow: inset 0 0 0 100rem #fff;
+  }
+}
+
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+  -webkit-appearance: none;
+  -moz-appearance: radio-container;
+  appearance: normal;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+// hide yandex iframe for tab click
+iframe[name='_ym_native'] {
+  display: none;
+}
+
+// Hide pixels
+[width='0'][height='0'],
+[width='1'][height='1'],
+.text-ad {
+  display: none;
+}
+
+
+// -------------------------------
+
+#__next {
+  height: 100%;
+}

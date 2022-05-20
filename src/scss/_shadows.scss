@@ -1,0 +1,11 @@
+@mixin field-light-shadow {
+  box-shadow:
+    0 4px 2px rgba(225, 231, 234, 0.16),
+    0 10px 8px 5px rgba(235, 239, 241, 0.6);
+}
+
+@mixin field-dark-shadow {
+  box-shadow:
+    0 4px 2px rgba(31, 35, 43, 0.12),
+    0 16px 28px rgba(31, 35, 43, 0.6);
+}

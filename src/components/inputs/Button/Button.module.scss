@@ -1,0 +1,126 @@
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+  text-align: center;
+  text-decoration: none !important;
+  vertical-align: top;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: all 0.25s $ease-out-quadratic;
+  user-select: none;
+  @include keyboard-focus;
+
+  &:not(.disabled) {
+
+    @media (hover: hover) {
+
+      &:hover,
+      &:focus {
+        transition: all 0s $ease-out-quadratic;
+      }
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    transition: none;
+  }
+}
+
+.content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+// Colors
+
+.primary {
+  color: $gray-5;
+  background: $brand-70;
+
+  @media (hover: hover) {
+
+    &:not(.disabled) {
+
+      &:hover {
+        background-color: $brand-60;
+      }
+    }
+  }
+
+  &.disabled {
+    background: $brand-40;
+  }
+}
+
+.secondary {
+  color: $gray-5;
+  background-color: $gray-90;
+
+  &:not(.disabled) {
+
+    @media (hover: hover) {
+
+      &:hover {
+        background-color: $gray-80;
+      }
+    }
+  }
+
+  &.disabled {
+    background-color: $gray-40;
+  }
+}
+
+.tertiary {
+  color: $gray-80;
+  background-color: $gray-20;
+
+  &.disabled {
+    color: $gray-40;
+  }
+}
+
+
+// Sizes
+
+.size-32 {
+  height: 32px;
+  padding: 0 16px;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.size-44 {
+  height: 44px;
+  padding: 0 18px;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 12px;
+}
+
+.size-48 {
+  height: 48px;
+  padding: 0 18px;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 12px;
+}
+
+.size-56 {
+  height: 56px;
+  padding: 0 20px;
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: 16px;
+}

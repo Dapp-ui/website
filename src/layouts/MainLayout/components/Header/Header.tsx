@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 
 import { Box, Container, Typography } from '@mui/material'
-import { ActiveLink } from 'components'
+import { ActiveLink } from 'components/navigation'
 
 import ConnectButton from './components/ConnectButton/ConnectButton'
 

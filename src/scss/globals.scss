@@ -1,11 +1,8 @@
-html {
-  background-color: #fafafa;
-}
+// ==========================================
 
-body {
-  width: 100%;
-  background: none !important;
-}
+// ATTN class names should be taken from https://tailwindcss.com/docs
+// ATTN don't replace classes with @each generators! Autocomplete will be broken!
+
 
 // Flex
 
@@ -138,6 +135,23 @@ body {
 }
 
 
+// Text Color
+
+
+// Weight
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+
+// Links
+
+
 // Display
 
 .block {
@@ -231,6 +245,10 @@ body {
   border-radius: 5px;
 }
 
+.radius-full {
+  border-radius: 1000px;
+}
+
 
 // Custom ============================================================ /
 
@@ -271,7 +289,7 @@ $indentMap: (
 
 $autoKeys: ('mt', 'mr', 'mb', 'ml', 'mx', 'my');
 
-$indentSizes: (4, 6, 8, 12, 16, 20, 24, 32, 36, 40, 48, 56);
+$indentSizes: (2, 4, 6, 8, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 60, 64, 72, 80, 96);
 
 @each $key, $cssProps in $indentMap {
   @each $size in $indentSizes {

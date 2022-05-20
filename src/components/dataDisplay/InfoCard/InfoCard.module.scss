@@ -1,0 +1,12 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: $gray-10;
+  border-radius: 20px;
+
+  &.small {
+    padding: 12rem 20px;
+    border-radius: 12px;
+  }
+}

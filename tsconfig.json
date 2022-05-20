@@ -21,11 +21,12 @@
     "incremental": true,
     "isolatedModules": true,
     "paths": {
-      "layouts/*": [ "src/layouts/*" ],
-      "hooks": [ "src/hooks" ],
-      "helpers": [ "src/helpers" ],
       "contracts": [ "src/contracts" ],
-      "components": [ "src/components" ]
+      "helpers": [ "src/helpers" ],
+      "layouts/*": [ "src/layouts/*" ],
+      "components/*": [ "src/components/*" ],
+      "views/*": [ "src/views/*" ],
+      "hooks": [ "src/hooks" ],
     }
   },
   "include": [

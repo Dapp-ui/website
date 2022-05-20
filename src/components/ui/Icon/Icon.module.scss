@@ -1,0 +1,28 @@
+$sizes: (12, 14, 16, 18, 20, 24, 32, 40);
+
+
+.icon {
+  vertical-align: text-bottom;
+}
+
+@include mobile {
+
+  @each $size in $sizes {
+
+    .size-#{$size} {
+      width: safe($size);
+      height: safe($size);
+    }
+  }
+}
+
+@include desktop {
+
+  @each $size in $sizes {
+
+    .size-#{$size} {
+      width: #{$size}px;
+      height: #{$size}px;
+    }
+  }
+}

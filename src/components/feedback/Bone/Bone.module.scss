@@ -1,0 +1,25 @@
+@keyframes shine-lines {
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.bone {
+  position: relative;
+  overflow: hidden;
+  background: $gray-40;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(#fff, 0.3), transparent);
+    transform: translateX(-100%);
+    animation: shine-lines 1.7s infinite;
+    content: '';
+  }
+}

@@ -1,0 +1,24 @@
+.widthContainer {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+
+@include mobile {
+
+  .widthContainer {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+}
+
+@include desktop {
+
+  .widthContainer {
+    box-sizing: content-box;
+    max-width: 1200px;
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+}
