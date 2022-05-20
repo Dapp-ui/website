@@ -1,6 +1,5 @@
 import React from 'react'
 import cx from 'classnames'
-import { useMedia } from 'hooks'
 
 import type { IconName } from './icons'
 
@@ -18,7 +17,6 @@ export type IconColor = typeof colors[number]
 type IconProps = {
   className?: string
   name: IconName
-  mobSize?: IconSize
   size?: IconSize
   color?: IconColor
   'aria-describedby'?: string
@@ -40,22 +38,10 @@ const IconBase: React.FunctionComponent<IconProps> = (props) => {
   )
 }
 
-const MediaIcon: React.FunctionComponent<IconProps> = (props) => {
-  const { size, mobSize, ...rest } = props
-
-  const { isMobile } = useMedia()
-
-  return <IconBase {...rest} size={isMobile ? mobSize : size} />
-}
-
 const Icon: React.FunctionComponent<IconProps> = (props) => {
-  const { mobSize } = props
+  const { size, ...rest } = props
 
-  if (mobSize) {
-    return <MediaIcon {...props} />
-  }
-
-  return <IconBase {...props} />
+  return <IconBase {...rest} size={size} />
 }
 
 

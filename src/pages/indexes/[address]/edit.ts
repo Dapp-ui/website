@@ -1,1 +1,1 @@
-export { default } from '../../EditIndexPage/EditIndexPage'
+export { default } from 'views/EditIndexPage/EditIndexPage'

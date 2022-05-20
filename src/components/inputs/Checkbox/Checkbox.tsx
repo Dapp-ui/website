@@ -17,7 +17,7 @@ export type CheckboxProps = {
   dataTestId?: string
 }
 
-const Checkbox: React.FunctionComponent<CheckboxProps> = (props) => {
+const Checkbox: React.FunctionComponent<React.PropsWithChildren<CheckboxProps>> = (props) => {
   const {
     children, className, field, value,
     disabled, fullWidth,

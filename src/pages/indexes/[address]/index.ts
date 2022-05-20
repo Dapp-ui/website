@@ -1,1 +1,1 @@
-export { default } from '../../IndexPage/IndexPage'
+export { default } from 'views/IndexPage/IndexPage'

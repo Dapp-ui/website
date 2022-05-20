@@ -98,7 +98,7 @@ const Select: React.FunctionComponent<SelectProps> = (props) => {
             }
             {
               isErrored && (
-                <Text style="t2" color="attention">{error}</Text>
+                <Text style="t2" color="accent-red-90">{error}</Text>
               )
             }
           </div>
