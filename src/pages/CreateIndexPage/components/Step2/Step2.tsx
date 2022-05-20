@@ -90,7 +90,7 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
   return (
     <>
       <Text className="mb-64" style="h1">
-        2/3 Setup percentage values
+        2/3. Setup percentage values
       </Text>
       <div>
         <div className={s.track} {...getTrackProps()}>

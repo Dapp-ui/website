@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import { getFactoryContract } from 'contracts'
-import { getVault, fetchIndexData } from 'helpers'
+import { getFactoryContract, rpcProvider, initialBlocks } from 'contracts'
+import { getVault, fetchIndexData, makeBlockRanges } from 'helpers'
 import { useQuery } from 'hooks'
 
 import { Container, Card, CardContent } from '@mui/material'
@@ -15,14 +15,16 @@ const IndexesPage: NextPage = () => {
     const factoryContract = getFactoryContract()
     const filter = factoryContract.filters.IndexCreated()
 
-    const events = await factoryContract.queryFilter(filter)
+    const lastBlock = await rpcProvider.getBlockNumber()
+    const blockRanges = makeBlockRanges(initialBlocks.factory, lastBlock)
 
-    const items = await Promise.all(events.map(async ({ args: { index: indexAddress } }) => {
-      // TODO filter for now - added on 5/20/22 by pavelivanov
-      if (indexAddress === '0xBD5ACa974305Ded788E5E76E7C4B667cE2E4aB1e') {
-        return
-      }
+    const events = await Promise.all(
+      blockRanges.map(([ startBlock, endBlock ]) => (
+        factoryContract.queryFilter(filter, startBlock, endBlock)
+      ))
+    )
 
+    const items = await Promise.all(events.flat().map(async ({ args: { index: indexAddress } }) => {
       return fetchIndexData(indexAddress)
     }))
 

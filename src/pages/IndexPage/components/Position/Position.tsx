@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { useQuery } from 'hooks'
-import { useField } from 'formular'
+import { useField, useFieldState } from 'formular'
+import { constants } from 'ethers'
 import { Web3Provider } from '@ethersproject/providers'
-import { getIndexContract } from 'contracts'
+import { parseUnits, formatUnits } from '@ethersproject/units'
+import { getTokenContract, getIndexContract, addresses, decimals } from 'contracts'
 import { useConnectWallet } from '@web3-onboard/react'
+import { compare, formatStringNumber } from 'helpers'
 import cx from 'classnames'
 
 import { AmountInput, Button } from 'components/inputs'
@@ -13,116 +16,180 @@ import { Card } from 'components/layout'
 import s from './Position.module.scss'
 
 
-const regex = /^(|0|0\.[0-9]*|[1-9][0-9]*\.?[0-9]*)$/
+type PositionProps = {
+  indexAddress: string
+}
 
-const Position: React.FC = () => {
+const Position: React.FC<PositionProps> = ({ indexAddress }) => {
   const [ { wallet } ] = useConnectWallet()
-  const [ view, setView ] = useState('buy')
-  const [ amount, setAmount ] = useState('')
+  const [ view, setView ] = useState('deposit')
   const [ isSubmitting, setSubmitting ] = useState(false)
 
+  const account = wallet?.accounts?.[0]?.address
   const amountField = useField<string>()
+  const { value: amount } = useFieldState(amountField)
+
+  const approve = async () => {
+    try {
+      setSubmitting(true)
+
+      const provider = new Web3Provider(wallet.provider)
+      const tokenContract = getTokenContract(provider.getSigner() as any)
+
+      // const rawAmount = parseUnits(amount, decimals.token)
+      const receipt = await tokenContract.approve(indexAddress, constants.MaxUint256)
+      const txHash = await receipt.wait()
+
+      setSubmitting(false)
+    }
+    catch (err) {
+      console.error(err)
+      setSubmitting(false)
+    }
+  }
+
+  const deposit = async () => {
+    try {
+      setSubmitting(true)
+
+      const provider = new Web3Provider(wallet.provider)
+      const indexContract = getIndexContract(indexAddress, provider.getSigner() as any)
+      const rawAmount = parseUnits(amount, decimals.token)
+
+      const receipt = await indexContract.deposit(addresses.token, rawAmount)
+      const txHash = await receipt.wait()
+
+      setSubmitting(false)
+    }
+    catch (err) {
+      console.error(err)
+      setSubmitting(false)
+    }
+  }
+
+  const withdraw = async () => {
+    try {
+      setSubmitting(true)
+
+      const provider = new Web3Provider(wallet.provider)
+      const indexContract = getIndexContract(indexAddress, provider.getSigner() as any)
+
+      const rawAmount = parseUnits(amount, indexDecimals)
+
+      const receipt = await indexContract.withdraw(addresses.token, rawAmount)
+      const txHash = await receipt.wait()
+
+      setSubmitting(false)
+    }
+    catch (err) {
+      console.error(err)
+      setSubmitting(false)
+    }
+  }
 
   const fetcher = async () => {
+    const indexContract = getIndexContract(indexAddress)
+    const tokenContract = getTokenContract()
+
+    const [
+      indexSymbol,
+      indexDecimals,
+      rawIndexBalance,
+      rawBalance,
+      rawAllowance,
+    ] = await Promise.all([
+      indexContract.symbol(),
+      indexContract.decimals(),
+      indexContract.balanceOf(account),
+      tokenContract.balanceOf(account),
+      tokenContract.allowance(account, indexAddress),
+    ])
+
+    const indexBalance = formatUnits(rawIndexBalance, indexDecimals)
+    const balance = formatUnits(rawBalance, decimals.token)
+    const allowance = formatUnits(rawAllowance, decimals.token)
 
     return {
-      balance: 100,
-      allowance: 100000,
+      indexSymbol,
+      indexDecimals,
+      indexBalance,
+      balance,
+      allowance,
     }
   }
 
   const { isFetching, data } = useQuery({
     endpoint: 'approve',
     fetcher,
+    skip: !account,
   })
 
-  const { balance, allowance } = data || {}
-  const approveRequired = allowance < balance
+  const { indexSymbol, indexDecimals, indexBalance, balance, allowance } = data || {}
 
-  const handleChange = (event) => {
-    const value = event.target.value
+  const isZeroAmount = !parseFloat(amount)
+  const isInsufficientBalance = compare(amount, '>', balance)
+  const isApproveRequired = compare(amount, '>', allowance)
 
-    if (regex.test(value)) {
-      setAmount(value)
-    }
-  }
-
-  const approve = () => {
-
-  }
-
-  const buy = async () => {
-    try {
-      setSubmitting(true)
-
-      const provider = new Web3Provider(wallet.provider)
-      const indexContract = getIndexContract(provider.getSigner() as any)
-
-      const receipt = await indexContract.deposit()
-      const txHash = await receipt.wait()
-
-      setSubmitting(false)
-    }
-    catch (err) {
-      console.error(err)
-      setSubmitting(false)
-    }
-  }
-
-  const sell = async () => {
-    try {
-      setSubmitting(true)
-
-      const provider = new Web3Provider(wallet.provider)
-      const indexContract = getIndexContract(provider.getSigner() as any)
-
-      const receipt = await indexContract.withdraw()
-      const txHash = await receipt.wait()
-
-      setSubmitting(false)
-    }
-    catch (err) {
-      console.error(err)
-      setSubmitting(false)
-    }
-  }
+  const maxValue = (view === 'deposit' ? balance : indexBalance) || '0'
+  const inputErrorLabel = isInsufficientBalance ? 'Insufficient balance' : null
 
   let buttonTitle
   let buttonAction
 
-  if (view === 'sell') {
+  if (view === 'withdraw') {
     buttonTitle = 'Sell Index'
-    buttonAction = sell
+    buttonAction = withdraw
   }
-  else if (approveRequired) {
+  else if (isApproveRequired) {
     buttonTitle = 'Approve'
     buttonAction = approve
   }
   else {
     buttonTitle = 'Buy Index'
-    buttonAction = buy
+    buttonAction = deposit
   }
 
   return (
     <Card>
       <div className="flex items-center justify-between mb-20">
-        <Text style="p1">Start earn interest today</Text>
-        <Text style="h4">APR 20%</Text>
+        {
+          Boolean(indexBalance) ? (
+            view === 'deposit' ? (
+              <div>
+                <Text style="p2" color="gray-60">Your balance</Text>
+                <Text style="h4">{formatStringNumber(balance)} fUSDT</Text>
+              </div>
+            ) : (
+              <div>
+                <Text style="p2" color="gray-60">Your position</Text>
+                <Text style="h4">{formatStringNumber(indexBalance, 15)} {indexSymbol}</Text>
+              </div>
+            )
+          ) : (
+            <Text style="p1">Start earning on<br />indexes today</Text>
+          )
+        }
+        <div className="text-right">
+          <Text style="p2" color="gray-60">APR</Text>
+          <Text style="h4">20%</Text>
+        </div>
       </div>
       <div className={s.tabs}>
         <Text
-          className={cx(s.tab, { [s.active]: view === 'buy' })}
+          className={cx(s.tab, { [s.active]: view === 'deposit' })}
           style="c2"
           color="gray-90"
-          onClick={() => setView('buy')}
+          tag="button"
+          onClick={() => setView('deposit')}
         >
           Deposit
         </Text>
         <Text
-          className={cx(s.tab, { [s.active]: view === 'sell' })}
+          className={cx(s.tab, { [s.active]: view === 'withdraw' })}
           style="c2"
           color="gray-90"
-          onClick={() => setView('sell')}
+          tag="button"
+          onClick={() => setView('withdraw')}
         >
           Withdraw
         </Text>
@@ -130,10 +197,10 @@ const Position: React.FC = () => {
       <div className="mt-32">
         <AmountInput
           field={amountField}
-          maxValue={balance}
+          maxValue={maxValue}
           label="Amount"
+          errorLabel={inputErrorLabel}
           placeholder="0.00"
-          withChips
         />
       </div>
       <div className="mt-32">
@@ -141,6 +208,8 @@ const Position: React.FC = () => {
           size={44}
           style="primary"
           fullWidth
+          loading={isSubmitting}
+          disabled={!account || isZeroAmount || isFetching}
           onClick={buttonAction}
         >
           {buttonTitle}

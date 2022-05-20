@@ -18,9 +18,9 @@ const web3Onboard = init({
   ],
   chains: [
     {
-      id: '0x2a',
-      token: 'ETH',
-      label: 'Kovan Testnet',
+      id: '0xfa',
+      token: 'FTM',
+      label: 'Fantom',
       rpcUrl: RPC_PROVIDER,
     },
   ],
@@ -31,14 +31,14 @@ const web3Onboard = init({
     description: 'Create your own Indexes for most popular vaults',
     recommendedInjectedWallets: [
       { name: 'Coinbase', url: 'https://wallet.coinbase.com/' },
-      { name: 'MetaMask', url: 'https://metamask.io' }
+      { name: 'MetaMask', url: 'https://metamask.io' },
     ],
   },
   accountCenter: {
     desktop: {
       enabled: false,
     },
-  }
+  },
 })
 
 const ConnectButton: React.FC = () => {

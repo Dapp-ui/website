@@ -1,24 +1,39 @@
 import { Contract } from 'ethers'
 import { JsonRpcProvider } from '@ethersproject/providers'
 
+import USDTABI from './abis/USDT.json'
 import FactoryABI from './abis/Factory.json'
 import IndexMasterABI from './abis/IndexMaster.json'
+import type { USDT } from './types/USDT'
 import type { Factory } from './types/Factory'
 import type { IndexMaster } from './types/IndexMaster'
 
 
-export const RPC_PROVIDER = 'https://kovan.infura.io/v3/ea1f915397b044ae9020c8635149e105'
+export const RPC_PROVIDER = 'https://rpc.ankr.com/fantom'
 
 export const addresses = {
-  factory: '0x2Bb4942a798966d9d8583E400310721E20798661',
+  token: '0x049d68029688eabf473097a2fc38ef61633a3c7a',
+  factory: '0x3786a1046c0B7581B64E28331997Dc2d279324E2', // WFTM: 0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83
 }
 
-const defaultProvider = new JsonRpcProvider(RPC_PROVIDER)
+export const decimals = {
+  token: 6,
+}
 
-export const getFactoryContract = (provider = defaultProvider) => {
+export const initialBlocks = {
+  factory: 38652376,
+}
+
+export const rpcProvider = new JsonRpcProvider(RPC_PROVIDER)
+
+export const getTokenContract = (provider = rpcProvider) => {
+  return new Contract(addresses.token, USDTABI, provider) as unknown as USDT
+}
+
+export const getFactoryContract = (provider = rpcProvider) => {
   return new Contract(addresses.factory, FactoryABI, provider) as unknown as Factory
 }
 
-export const getIndexContract = (address, provider = defaultProvider) => {
+export const getIndexContract = (address, provider = rpcProvider) => {
   return new Contract(address, IndexMasterABI, provider) as unknown as IndexMaster
 }

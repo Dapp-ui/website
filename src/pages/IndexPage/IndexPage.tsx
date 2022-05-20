@@ -86,7 +86,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ address }) => {
               }
             </div>
             <div>
-              <Position />
+              <Position indexAddress={address} />
             </div>
           </div>
         )

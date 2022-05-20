@@ -21,7 +21,7 @@ const Header: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <Box pt={2} pb={2} className="flex items-center justify-between">
-        <Link href="/">
+        <Link href="/indexes">
           <a className={s.logo}>
             <img src="/images/logo.svg" alt="" />
             <Text style="h3">IndexClub</Text>

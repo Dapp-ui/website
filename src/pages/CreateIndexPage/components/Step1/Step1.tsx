@@ -46,7 +46,7 @@ const Step1: React.FC<Step1Props> = ({ onContinue }) => {
   return (
     <>
       <Text className="mb-56" style="h1">
-        1/3 Choose from vaults
+        1/3. Choose from vaults
       </Text>
       <div className={s.items}>
         {

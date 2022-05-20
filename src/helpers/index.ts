@@ -1,3 +1,6 @@
+export { default as compare } from './compare'
+export { default as makeBlockRanges } from './makeBlockRanges'
 export { default as shortenAddress } from './shortenAddress'
 export { default as fetchIndexData } from './fetchIndexData'
+export { default as formatStringNumber } from './formatStringNumber'
 export * from './vaults'
