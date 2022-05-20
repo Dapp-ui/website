@@ -1,0 +1,18 @@
+.tabs {
+  display: flex;
+}
+
+.tab {
+  margin-left: 20px;
+  color: #000;
+  font-size: 16px;
+  border-bottom: 3px solid transparent;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &.active {
+    border-bottom-color: #333;
+  }
+}

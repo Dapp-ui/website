@@ -23,7 +23,9 @@
     "paths": {
       "layouts/*": [ "src/layouts/*" ],
       "hooks": [ "src/hooks" ],
-      "helpers": [ "src/helpers" ]
+      "helpers": [ "src/helpers" ],
+      "contracts": [ "src/contracts" ],
+      "components": [ "src/components" ]
     }
   },
   "include": [

@@ -1,16 +1,15 @@
 .items {
   display: grid;
-  grid-gap: 20px;
-  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 4px;
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .item {
-
-  button {
-    width: 100%;
-  }
+  display: flex !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
 
   &.selected {
-    background-color: yellow;
+    background-color: #eee;
   }
 }

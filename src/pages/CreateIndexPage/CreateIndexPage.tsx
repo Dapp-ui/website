@@ -1,10 +1,8 @@
 import type { NextPage } from 'next'
 import { useState } from 'react'
-
 import { Container } from '@mui/material'
 
 import { ContextProvider } from './utils/context'
-
 import { Step1, Step2, Step3 } from './components'
 
 import s from './CreateIndexPage.module.scss'
@@ -12,7 +10,6 @@ import s from './CreateIndexPage.module.scss'
 
 const CreateIndexPage: NextPage = () => {
   const [ step, setStep ] = useState(0)
-  const [ selectedId, setSelectedId ] = useState()
 
   const handlePrevStep = () => {
     setStep((curr) => --curr)

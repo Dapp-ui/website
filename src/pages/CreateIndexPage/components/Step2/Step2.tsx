@@ -1,30 +1,37 @@
-import React, { useMemo, useState } from 'react'
+/* eslint-disable react/jsx-key */
 
-import { Box, Typography, Slider, Button, Card, CardContent, Alert } from '@mui/material'
+import React, { useMemo, useState, useEffect } from 'react'
+import { useRanger } from 'react-ranger'
+import cx from 'classnames'
+
+import { Box, Typography, Button, Alert } from '@mui/material'
+import { DragHandle } from '@mui/icons-material'
 
 import { useContext } from '../../utils/context'
 
 import s from './Step2.module.scss'
 
 
-const sliderMarks = Array.from(Array(11).keys()).map((num) => ({ value: num * 10 }))
+const colors = [
+  '#22ff85',
+  '#0be56c',
+  '#06c65c',
+  '#00af53',
+  '#00863c',
+]
 
 const getInitialDistribution = (count: number) => {
-  if (count === 1) {
-    return [ 100 ]
-  }
+  const minValue = Math.floor(100 / count - 1)
+  let currValue = 0
 
-  const minValue = Math.floor(100 / count)
-  let leftAmount = 100
+  return Array.from(Array(count - 1).keys()).map(() => {
+    const value = currValue += minValue
 
-  return Array.from(Array(count).keys()).map((_, index) => {
-    if (index === count - 1) {
-      return leftAmount
+    if (value > 100) {
+      return 100 - currValue
     }
 
-    leftAmount -= minValue
-
-    return minValue
+    return value
   })
 }
 
@@ -38,30 +45,29 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
 
   const initialValue = percentageDistribution || getInitialDistribution(selectedVaultIds.length)
 
-  const [ distribution, setDistribution ] = useState(initialValue)
+  const [ values, setValues ] = useState(initialValue)
+
+  useEffect(() => {
+    setValues(getInitialDistribution(selectedVaultIds.length))
+  }, [ selectedVaultIds ])
+
+  const { getTrackProps, ticks, segments, handles } = useRanger({
+    min: 0,
+    max: 100,
+    stepSize: 1,
+    values,
+    onDrag: setValues,
+  })
 
   const selectedVaults = useMemo(() => (
-    selectedVaultIds.map((id) => vaults.find((item) => item.id === id))
-  ), [])
+    selectedVaultIds.map((id) => vaults.find((item) => item.address === id))
+  ), [ selectedVaultIds ])
 
-  const handleChange = (index, value) => {
-    setDistribution((values) => {
-      const newValues = [ ...values ]
-      newValues[index] = value
-      if (selectedVaults.length === 2) {
-        newValues[selectedVaults.length - 1 - index] = 100 - value
-      }
-      return newValues
-    })
-  }
-
-  const handleEstablish = (index) => {
-    setDistribution((values) => {
-      const newValues = [ ...values ]
-      const value = 100 - distribution.reduce((acc, value, i) => i === index ? acc : acc += value, 0)
-      newValues[index] = value < 0 ? 0 : (value > 100 ? 100 : value)
-      return newValues
-    })
+  const handleRemove = (index) => {
+    console.log(222, index)
+    setContextState(({ selectedVaultIds }) => ({
+      selectedVaultIds: selectedVaultIds.filter((_, i) => i !== index),
+    }))
   }
 
   const handleBack = () => {
@@ -69,14 +75,14 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
   }
 
   const handleContinue = () => {
-    setContextState({ percentageDistribution: distribution })
+    setContextState({ percentageDistribution: values })
     onContinue()
   }
 
-  const valuesSum = distribution.reduce((acc, value) => acc += value, 0)
-
-  const summaryAPR = distribution.reduce((acc, percentage, index) => {
+  const summaryAPR = values.reduce((acc, value, index) => {
     const { apr } = selectedVaults[index]
+
+    const percentage = !index ? value : value - values[index - 1]
 
     return acc += apr * percentage / 100
   }, 0)
@@ -84,55 +90,75 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
   return (
     <>
       <Typography component="h2" variant="h5" mb={3}>
-        Setup percentage distribution
+        Setup percentage values
       </Typography>
-      <div className={s.items}>
+      <Box mt={8} mb={2}>
+        <div className={s.track} {...getTrackProps()}>
+          <div className={s.segments}>
+            {
+              segments.map(({ getSegmentProps }, index) => {
+                let value = values[index] - (values[index - 1] || 0)
+
+                if (index === values.length) {
+                  value = 100 - values[values.length - 1]
+                }
+
+                const { style, ...rest } = getSegmentProps()
+
+                return (
+                  <div className={s.segment} {...rest} style={{ ...style, background: colors[index] }}>
+                    <span className={s.segmentValue}>{value}%</span>
+                  </div>
+                )
+              })
+            }
+          </div>
+          {
+            handles.map(({ value, active, getHandleProps }) => (
+              <button
+                {...getHandleProps({
+                  style: {
+                    appearance: 'none',
+                    border: 'none',
+                    background: 'transparent',
+                    outline: 'none'
+                  }
+                })}
+              >
+                <div className={cx(s.handle, { [s.active]: active })} />
+              </button>
+            ))
+          }
+        </div>
+      </Box>
+      <Box mt={3}>
         {
-          selectedVaults.map(({ id, protocol, name, apr }, index) => (
-            <Card key={id} className={s.item}>
-              <CardContent>
-                <div>Protocol: <b>{protocol}</b></div>
-                <div>Name: <b>{name}</b></div>
-                <div>APR: <b>{apr}%</b></div>
-                <Box mt={5}>
-                  <Slider
-                    step={1}
-                    defaultValue={distribution[index]}
-                    value={distribution[index]}
-                    marks={sliderMarks}
-                    valueLabelDisplay="on"
-                    onChange={(event, value) => handleChange(index, value)}
-                  />
-                </Box>
+          selectedVaults.map(({ protocol, tokenSymbol }, index) => {
+
+            return (
+              <div key={index} className={s.item}>
+                <div className={s.square} style={{ background: colors[index] }} />
+                <span>Protocol: <b>{protocol}</b>, Token: <b>{tokenSymbol}</b></span>
                 {
-                  selectedVaults.length > 2 && (
+                  selectedVaultIds.length > 2 && (
                     <Button
-                      size="medium"
-                      disabled={valuesSum === 100}
-                      onClick={() => handleEstablish(index)}
+                      size="small"
+                      variant="contained"
+                      onClick={() => handleRemove(index)}
                     >
-                      Establish
+                      Remove
                     </Button>
                   )
                 }
-              </CardContent>
-            </Card>
-          ))
-        }
-      </div>
-      <Box mt={3} mb={4}>
-        <Alert severity="info">Summary APR: {summaryAPR}%</Alert>
-        {
-          valuesSum !== 100 && (
-            <Box mt={2}>
-              <Alert severity="error">
-                Percentage distribution summ is <b>{valuesSum}%</b>. Make sure it`s <b>100%</b>.
-              </Alert>
-            </Box>
-          )
+              </div>
+            )
+          })
         }
       </Box>
-      <div className="flex justify-between">
+      <Box mt={3}>
+        <Alert severity="info">Summary APR: {summaryAPR}%</Alert>
+      </Box>
+      <Box mt={4} className="flex justify-between">
         <Button
           size="medium"
           onClick={handleBack}
@@ -142,12 +168,11 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
         <Button
           size="medium"
           variant="contained"
-          disabled={valuesSum !== 100}
           onClick={handleContinue}
         >
           Continue
         </Button>
-      </div>
+      </Box>
     </>
   )
 }

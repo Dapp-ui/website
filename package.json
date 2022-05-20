@@ -4,15 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run typechain && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typechain": "typechain --target ethers-v5 --out-dir ./src/contracts/types './src/contracts/abis/*.json'"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.6.2",
     "@mui/material": "^5.7.0",
+    "@typechain/ethers-v5": "^10.0.0",
     "@web3-onboard/coinbase": "^2.0.2",
     "@web3-onboard/core": "^2.2.8",
     "@web3-onboard/injected-wallets": "^2.0.6",
@@ -20,7 +22,10 @@
     "classnames": "^2.3.1",
     "next": "12.1.6",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "react-ranger": "^2.1.0",
+    "swr": "^1.3.0",
+    "typechain": "^8.0.0"
   },
   "devDependencies": {
     "@types/node": "17.0.33",

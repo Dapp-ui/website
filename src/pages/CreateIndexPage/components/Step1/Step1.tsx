@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import cx from 'classnames'
 
-import { Box, Typography, Checkbox, Button, ButtonBase, Card, CardContent } from '@mui/material'
+import { Box, Typography, Checkbox, Button, ButtonBase, Alert } from '@mui/material'
 
 import { useContext } from '../../utils/context'
 
@@ -14,18 +14,25 @@ type Step1Props = {
 
 const Step1: React.FC<Step1Props> = ({ onContinue }) => {
   const [ { vaults, selectedVaultIds }, setContextState ] = useContext()
-  const [ selectedIds, setSelectedIds ] = useState<number[]>(selectedVaultIds || [])
+  const [ selectedIds, setSelectedIds ] = useState<string[]>(selectedVaultIds || [])
+  const [ isMaxError, setMaxError ] = useState(false)
 
-  const handleItemClick = (id) => {
+  const handleItemClick = (address: string) => {
     let newIds
 
-    if (selectedIds.includes(id)) {
-      newIds = selectedIds.filter((_id) => _id !== id)
+    if (selectedIds.includes(address)) {
+      newIds = selectedIds.filter((id) => id !== address)
     }
     else {
-      newIds = [ ...selectedIds, id ]
+      newIds = [ ...selectedIds, address ]
     }
 
+    if (newIds.length > 5) {
+      setMaxError(true)
+      return
+    }
+
+    setMaxError(false)
     setSelectedIds(newIds)
   }
 
@@ -41,28 +48,33 @@ const Step1: React.FC<Step1Props> = ({ onContinue }) => {
       </Typography>
       <div className={s.items}>
         {
-          vaults.map(({ id, protocol, name, apr }) => {
-            const isSelected = selectedIds.includes(id)
+          vaults.map(({ address, protocol, tokenSymbol, apr }) => {
+            const isSelected = selectedIds.includes(address)
 
             const className = cx(s.item, {
               [s.selected]: isSelected,
             })
 
             return (
-              <Card key={name} className={className}>
-                <ButtonBase onClick={() => handleItemClick(id)}>
-                  <CardContent>
-                    <Checkbox className={s.checkbox} checked={isSelected} />
-                    <div>Protocol: <b>{protocol}</b></div>
-                    <div>Name: <b>{name}</b></div>
-                    <div>APR: <b>{apr}%</b></div>
-                  </CardContent>
-                </ButtonBase>
-              </Card>
+              <ButtonBase key={address} className={className} onClick={() => handleItemClick(address)}>
+                <Checkbox className={s.checkbox} checked={isSelected} />
+                <div>Protocol: <b>{protocol}</b></div>
+                <div>Token: <b>{tokenSymbol}</b></div>
+                <div>APR: <b>{apr}%</b></div>
+              </ButtonBase>
             )
           })
         }
       </div>
+      {
+        isMaxError && (
+          <Box mt={4}>
+            <Alert severity="error">
+              You can select maximum 5 items.
+            </Alert>
+          </Box>
+        )
+      }
       <Box mt={4} className="flex justify-end">
         <Button
           size="medium"

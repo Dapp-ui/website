@@ -1,39 +1,19 @@
 import React from 'react'
 import { useReducerState } from 'hooks'
 import type { SetState } from 'hooks'
+import { vaults } from 'helpers'
 
 
 type Vaults = {
-  id: number
+  address: string
   protocol: string
-  name: string
+  tokenSymbol: string
   apr: number
 }[]
 
-const vaults = [
-  {
-    id: 1,
-    protocol: 'Yearn',
-    name: 'yUSDT',
-    apr: 23,
-  },
-  {
-    id: 2,
-    protocol: 'Yearn',
-    name: 'yCRV3Pool',
-    apr: 16,
-  },
-  {
-    id: 3,
-    protocol: 'Yearn',
-    name: 'yUSDC',
-    apr: 18,
-  },
-]
-
 type State = {
   vaults: Vaults
-  selectedVaultIds: number[]
+  selectedVaultIds: string[]
   percentageDistribution: number[]
 }
 

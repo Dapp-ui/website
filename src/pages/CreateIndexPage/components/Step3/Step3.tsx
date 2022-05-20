@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { useConnectWallet } from '@web3-onboard/react'
+import { getFactoryContract } from 'contracts'
+import { Web3Provider } from '@ethersproject/providers'
 
 import { Box, TextField, Button } from '@mui/material'
+
+import { useContext } from '../../utils/context'
 
 import s from './Step3.module.scss'
 
@@ -12,6 +16,7 @@ type Step3Props = {
 
 const Step3: React.FC<Step3Props> = ({ onBack }) => {
   const [ { wallet }, connect ] = useConnectWallet()
+  const [ { vaults, selectedVaultIds, percentageDistribution } ] = useContext()
 
   const [ name, setName ] = useState('')
   const [ nameError, setNameError ] = useState(null)
@@ -29,7 +34,7 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
   }
 
   const checkSymbolUnique = (symbol) => {
-    return Promise.resolve(false)
+    return Promise.resolve(true)
   }
 
   const handleSubmit = async (event) => {
@@ -49,6 +54,32 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
       setSymbolError('Such symbol is already occupied')
       return
     }
+
+    const provider = new Web3Provider(wallet.provider)
+    const factoryContract = getFactoryContract(provider.getSigner() as any)
+
+    const components = (
+      selectedVaultIds
+        .map((id) => vaults.find((item) => item.address === id))
+        .map(({ address }, index) => {
+          const prevValue = percentageDistribution[index - 1] || 0
+          const currValue = index === selectedVaultIds.length - 1 ? 100 : percentageDistribution[index]
+          let targetWeight = currValue - prevValue
+
+          return {
+            vault: address,
+            targetWeight,
+          }
+        })
+    )
+
+    console.log('data:', {
+      name,
+      symbol,
+      components,
+    })
+
+    factoryContract.createIndex(name, symbol, components)
   }
 
   return (
@@ -89,7 +120,7 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
               <Button
                 variant="contained"
                 size="medium"
-                type="submit"
+                type="button"
                 fullWidth
                 onClick={() => connect({})}
               >

@@ -5,12 +5,44 @@
 }
 
 .item {
+  display: flex;
+  align-items: center;
+}
 
-  button {
-    width: 100%;
-  }
+.square {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+}
 
-  &.selected {
-    background-color: yellow;
-  }
+
+.track {
+
+}
+
+.segments {
+  height: 80px;
+}
+
+.segment {
+  position: relative;
+  height: 100%;
+}
+
+.segmentValue {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.handle {
+  background: #080808;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 20px;
+  border-radius: 3px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
