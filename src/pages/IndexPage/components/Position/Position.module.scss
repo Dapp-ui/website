@@ -1,18 +1,24 @@
 .tabs {
   display: flex;
+  width: 100%;
+  border-bottom: 1px solid $gray-20;
 }
 
 .tab {
   margin-left: 20px;
-  color: #000;
-  font-size: 16px;
-  border-bottom: 3px solid transparent;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
 
   &:first-child {
     margin-left: 0;
   }
 
+  &:hover {
+    border-bottom-color: $gray-20;
+  }
+
   &.active {
-    border-bottom-color: #333;
+    border-bottom-color: $gray-80;
+    cursor: default;
   }
 }

@@ -22,7 +22,7 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
   return (
     <div className={cx(s.card, className, { [s.small]: small })}>
       <div className="flex items-center justify-between">
-        <Text message={title} style="p1" color="gray-60" />
+        <Text style="p1" color="gray-60">{title}</Text>
       </div>
       <div className="flex items-start mt-auto">
         {
@@ -32,7 +32,7 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
                 isFetching ? (
                   <Icon name="interface/spinner" size={24} />
                 ) : (
-                  <Text message={value} style={small ? 'h4' : 'h3'} color="gray-90" />
+                  <Text style={small ? 'h4' : 'h3'} color="gray-90">{value}</Text>
                 )
               }
             </>

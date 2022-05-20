@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import { Box, Container, Typography } from '@mui/material'
 import { ActiveLink } from 'components/navigation'
+import { Text } from 'components/dataDisplay'
 
 import ConnectButton from './components/ConnectButton/ConnectButton'
 
@@ -23,29 +24,14 @@ const Header: React.FC = () => {
         <Link href="/">
           <a className={s.logo}>
             <img src="/images/logo.svg" alt="" />
-            <Typography
-              component="h2"
-              variant="h5"
-              color="inherit"
-              noWrap
-              sx={{ flex: 1 }}
-            >
-              IndexClub
-            </Typography>
+            <Text style="h3">IndexClub</Text>
           </a>
         </Link>
         <div className={s.nav}>
           {
             nav.map(({ title, link, toTab }) => {
               const content = (
-                <Typography
-                  variant="body1"
-                  color="inherit"
-                  noWrap
-                  sx={{ flex: 1 }}
-                >
-                  {title}
-                </Typography>
+                <Text style="p1">{title}</Text>
               )
 
               if (toTab) {

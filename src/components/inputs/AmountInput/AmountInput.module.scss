@@ -10,14 +10,13 @@
 
 .input {
   width: 100%;
-  padding: 27rem 72rem 7rem 20px;
+  padding: 27px 72px 7px 20px;
   color: $gray-80;
   font-weight: 700;
   font-size: 18px;
   line-height: 28px;
   background-color: $gray-5;
   border: 1px solid $gray-5;
-  border-radius: 16px;
   box-shadow: none;
   @include basic-transition();
 
@@ -60,7 +59,6 @@
   line-height: 56px;
   text-transform: uppercase;
   background: none;
-  border-radius: 12px;
   box-shadow: 0 2px 6px rgba(152, 164, 179, 0.1);
   cursor: pointer;
 

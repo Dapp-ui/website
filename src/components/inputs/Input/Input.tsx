@@ -20,7 +20,6 @@ export type InputProps = {
   focusOnInit?: boolean
   disabled?: boolean
   validateOnBlur?: boolean
-  warning?: boolean
   subMessage?: string
   subNode?: React.ReactElement
   onBlur?: (value: string) => void
@@ -33,7 +32,7 @@ const Input: React.FunctionComponent<InputProps> = (props) => {
   let {
     className, field, size, pattern, placeholder,
     focusOnInit, disabled, validateOnBlur = true,
-    subMessage, subNode, warning,
+    subMessage, subNode,
     onFocus, onBlur, onChange, dataTestId,
   } = props
 
@@ -88,7 +87,6 @@ const Input: React.FunctionComponent<InputProps> = (props) => {
 
   const inputClassName = cx(s.input, {
     [s.filled]: isFilled,
-    [s.warning]: warning,
     [s.errored]: isErrored,
     [s.disabled]: disabled,
   })

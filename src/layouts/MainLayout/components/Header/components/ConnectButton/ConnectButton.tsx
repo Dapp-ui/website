@@ -5,7 +5,7 @@ import { init, useConnectWallet, useSetChain, useWallets } from '@web3-onboard/r
 import { shortenAddress } from 'helpers'
 import { RPC_PROVIDER } from 'contracts'
 
-import { Button } from '@mui/material'
+import { Button } from 'components/inputs'
 
 
 const injected = injectedModule()
@@ -94,8 +94,8 @@ const ConnectButton: React.FC = () => {
   if (wallet) {
     return (
       <Button
-        variant="outlined"
-        size="small"
+        size={32}
+        style="secondary"
         onClick={() => disconnect(wallet)}
       >
         {`${shortenAddress(wallet.accounts[0].address)} (Disconnect)`}
@@ -105,8 +105,8 @@ const ConnectButton: React.FC = () => {
 
   return (
     <Button
-      variant="outlined"
-      size="small"
+      size={32}
+      style="primary"
       disabled={connecting}
       onClick={() => connect({})}
     >

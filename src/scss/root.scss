@@ -14,6 +14,7 @@ html {
 
 body {
   position: relative;
+  width: 100%;
   -webkit-overflow-scrolling: touch;
 
   &.body-scroll-frozen {
@@ -66,7 +67,7 @@ select {
   // Chrome autofilled background color
   &:-webkit-autofill,
   &:-webkit-autofill:focus {
-    -webkit-box-shadow: inset 0 0 0 100rem #fff;
+    -webkit-box-shadow: inset 0 0 0 100px #fff;
   }
 }
 

@@ -5,20 +5,19 @@
 .input {
   width: 100%;
   padding: 0 16px;
-  border-radius: 8px;
   box-shadow: none;
-  color: $gray-80;
+  color: $gray-90;
   background-color: $gray-5;
-  border: 1px solid $gray-5;
+  border: 1px solid $gray-40;
   @include basic-transition();
 
   @include placeholder {
-    color: $gray-40;
+    color: $gray-60;
   }
 
   &:hover,
   &:focus {
-    @include field-light-shadow;
+    border-color: $gray-60;
   }
 
   &.errored {
@@ -35,16 +34,16 @@
 
   .size-36 & {
     height: 36px;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .size-44 & {
     height: 44px;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .size-56 & {
     height: 56px;
-    font-size: 16px;
+    font-size: 18px;
   }
 }

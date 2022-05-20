@@ -10,13 +10,14 @@ import s from './Button.module.scss'
 
 
 const iconSizes = {
+  20: 10,
   32: 14,
   44: 16,
   56: 18,
 }
 
 export const widths = [] as const
-export const sizes = [ 32, 44, 48, 56 ] as const
+export const sizes = [ 20, 32, 44, 48, 56 ] as const
 export const styles = [ 'primary', 'secondary', 'tertiary' ] as const
 
 type ButtonWidth = typeof widths[number]

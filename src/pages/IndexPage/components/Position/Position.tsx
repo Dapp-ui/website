@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import { useQuery } from 'hooks'
+import { useField } from 'formular'
 import { Web3Provider } from '@ethersproject/providers'
 import { getIndexContract } from 'contracts'
 import { useConnectWallet } from '@web3-onboard/react'
-import { Container, Button, Card, CardContent, TextField } from '@mui/material'
 import cx from 'classnames'
+
+import { AmountInput, Button } from 'components/inputs'
+import { Text } from 'components/dataDisplay'
+import { Card } from 'components/layout'
 
 import s from './Position.module.scss'
 
@@ -16,6 +20,8 @@ const Position: React.FC = () => {
   const [ view, setView ] = useState('buy')
   const [ amount, setAmount ] = useState('')
   const [ isSubmitting, setSubmitting ] = useState(false)
+
+  const amountField = useField<string>()
 
   const fetcher = async () => {
 
@@ -99,41 +105,47 @@ const Position: React.FC = () => {
 
   return (
     <Card>
-      <CardContent>
-        <div className={s.tabs}>
-          <div
-            className={cx(s.tab, { [s.active]: view === 'buy' })}
-            onClick={() => setView('buy')}
-          >
-            Buy
-          </div>
-          <div
-            className={cx(s.tab, { [s.active]: view === 'sell' })}
-            onClick={() => setView('sell')}
-          >
-            Sell
-          </div>
-        </div>
-        <div className="mt-20">
-          <TextField
-            label="Amount"
-            value={amount}
-            fullWidth
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mt-20">
-          <Button
-            variant="contained"
-            size="medium"
-            type="button"
-            fullWidth
-            onClick={buttonAction}
-          >
-            {buttonTitle}
-          </Button>
-        </div>
-      </CardContent>
+      <div className="flex items-center justify-between mb-20">
+        <Text style="p1">Start earn interest today</Text>
+        <Text style="h4">APR 20%</Text>
+      </div>
+      <div className={s.tabs}>
+        <Text
+          className={cx(s.tab, { [s.active]: view === 'buy' })}
+          style="c2"
+          color="gray-90"
+          onClick={() => setView('buy')}
+        >
+          Deposit
+        </Text>
+        <Text
+          className={cx(s.tab, { [s.active]: view === 'sell' })}
+          style="c2"
+          color="gray-90"
+          onClick={() => setView('sell')}
+        >
+          Withdraw
+        </Text>
+      </div>
+      <div className="mt-32">
+        <AmountInput
+          field={amountField}
+          maxValue={balance}
+          label="Amount"
+          placeholder="0.00"
+          withChips
+        />
+      </div>
+      <div className="mt-32">
+        <Button
+          size={44}
+          style="primary"
+          fullWidth
+          onClick={buttonAction}
+        >
+          {buttonTitle}
+        </Button>
+      </div>
     </Card>
   )
 }

@@ -10,5 +10,3 @@ export type { ButtonProps } from './Button/Button'
 
 export { default as IconButton } from './IconButton/IconButton'
 export { default as Chip } from './Chip/Chip'
-
-export { default as Dropdown } from './Dropdown/Dropdown'

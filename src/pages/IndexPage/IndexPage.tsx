@@ -58,7 +58,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ address }) => {
         isFetching ? (
           <div>Loading...</div>
         ) : (
-          <div className="flex justify-between">
+          <div className={s.content}>
             <div>
               <div>Name: <b>{name}</b></div>
               <div>Symbol: <b>{symbol}</b></div>

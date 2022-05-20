@@ -9,7 +9,7 @@ type ActiveLinkProps = LinkProps & {
   exact?: boolean
 }
 
-const ActiveLink: React.FunctionComponent<ActiveLinkProps> = (props) => {
+const ActiveLink: React.FunctionComponent<React.PropsWithChildren<ActiveLinkProps>> = (props) => {
   const { children, activeClassName, exact, ...rest } = props
 
   const { asPath } = useRouter()

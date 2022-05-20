@@ -1,11 +1,10 @@
 /* eslint-disable react/jsx-key */
-
 import React, { useMemo, useState, useEffect } from 'react'
 import { useRanger } from 'react-ranger'
 import cx from 'classnames'
 
-import { Box, Typography, Button, Alert } from '@mui/material'
-import { DragHandle } from '@mui/icons-material'
+import { Button } from 'components/inputs'
+import { Text } from 'components/dataDisplay'
 
 import { useContext } from '../../utils/context'
 
@@ -64,7 +63,6 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
   ), [ selectedVaultIds ])
 
   const handleRemove = (index) => {
-    console.log(222, index)
     setContextState(({ selectedVaultIds }) => ({
       selectedVaultIds: selectedVaultIds.filter((_, i) => i !== index),
     }))
@@ -79,7 +77,7 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
     onContinue()
   }
 
-  const summaryAPR = values.reduce((acc, value, index) => {
+  let totalAPR = values.reduce((acc, value, index) => {
     const { apr } = selectedVaults[index]
 
     const percentage = !index ? value : value - values[index - 1]
@@ -87,12 +85,14 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
     return acc += apr * percentage / 100
   }, 0)
 
+  totalAPR = totalAPR ? +Number(totalAPR).toFixed(2) : totalAPR
+
   return (
     <>
-      <Typography component="h2" variant="h5" mb={3}>
-        Setup percentage values
-      </Typography>
-      <Box mt={8} mb={2}>
+      <Text className="mb-64" style="h1">
+        2/3 Setup percentage values
+      </Text>
+      <div>
         <div className={s.track} {...getTrackProps()}>
           <div className={s.segments}>
             {
@@ -130,20 +130,20 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
             ))
           }
         </div>
-      </Box>
-      <Box mt={3}>
+      </div>
+      <div className="mt-32">
         {
           selectedVaults.map(({ protocol, tokenSymbol }, index) => {
 
             return (
               <div key={index} className={s.item}>
                 <div className={s.square} style={{ background: colors[index] }} />
-                <span>Protocol: <b>{protocol}</b>, Token: <b>{tokenSymbol}</b></span>
+                <Text className={s.title} style="p1">Protocol: <b>{protocol}</b>, Token: <b>{tokenSymbol}</b></Text>
                 {
                   selectedVaultIds.length > 2 && (
                     <Button
-                      size="small"
-                      variant="contained"
+                      size={20}
+                      style="tertiary"
                       onClick={() => handleRemove(index)}
                     >
                       Remove
@@ -154,25 +154,26 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
             )
           })
         }
-      </Box>
-      <Box mt={3}>
-        <Alert severity="info">Summary APR: {summaryAPR}%</Alert>
-      </Box>
-      <Box mt={4} className="flex justify-between">
+      </div>
+      <div className="flex justify-between mt-56">
         <Button
-          size="medium"
+          size={44}
+          style="tertiary"
           onClick={handleBack}
         >
           Go Back
         </Button>
-        <Button
-          size="medium"
-          variant="contained"
-          onClick={handleContinue}
-        >
-          Continue
-        </Button>
-      </Box>
+        <div className="flex">
+          <div className={s.totalAPR}>Total APR: {totalAPR}%</div>
+          <Button
+            size={44}
+            style="primary"
+            onClick={handleContinue}
+          >
+            Continue
+          </Button>
+        </div>
+      </div>
     </>
   )
 }
