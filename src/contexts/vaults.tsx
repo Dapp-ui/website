@@ -114,7 +114,7 @@ export const VaultsProvider = ({ children }) => {
       return acc
     }, {})
 
-    localStorage.setItem(cacheKey, JSON.stringify(result))
+    localStorage.setItem(cacheKey, JSON.stringify({ createdAt: Date.now(), data: result }))
 
     return result
   }

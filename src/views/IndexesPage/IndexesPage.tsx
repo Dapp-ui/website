@@ -35,7 +35,19 @@ const IndexesPage: NextPage = () => {
   const router = useRouter()
   const { isVaultsFetching, vaultsMap } = useVaults()
 
-  const fetcher = async () => {
+  const getAddresses = async () => {
+    const cacheKey = 'index-club-indexes-cache'
+    let storageValue = localStorage.getItem(cacheKey)
+
+    if (storageValue) {
+      const { createdAt, data } = JSON.parse(storageValue)
+
+      // less than 10 min
+      if (Date.now() - createdAt < 10 * 60 * 60 * 1000) {
+        return data
+      }
+    }
+
     const factoryContract = getFactoryContract()
     const filter = factoryContract.filters.IndexCreated()
 
@@ -48,7 +60,17 @@ const IndexesPage: NextPage = () => {
       ))
     )
 
-    const items = await Promise.all(events.flat().map(async ({ args: { index: indexAddress } }) => {
+    const addresses = events.flat().map(({ args: { index: indexAddress } }) => indexAddress)
+
+    localStorage.setItem(cacheKey, JSON.stringify({ createdAt: Date.now(), data: addresses }))
+
+    return addresses
+  }
+
+  const fetcher = async () => {
+    const addresses = await getAddresses()
+
+    const items = await Promise.all(addresses.map(async (indexAddress) => {
       return fetchIndexData(indexAddress, vaultsMap)
     }))
 
