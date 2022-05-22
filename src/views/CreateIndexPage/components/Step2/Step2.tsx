@@ -12,11 +12,11 @@ import s from './Step2.module.scss'
 
 
 const colors = [
-  '#22ff85',
-  '#0be56c',
-  '#06c65c',
-  '#00af53',
-  '#00863c',
+  '#15e3ff',
+  '#2bf885',
+  '#fffb5f',
+  '#e571ff',
+  '#b2ff37',
 ]
 
 const getInitialDistribution = (count: number) => {
@@ -89,8 +89,8 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
 
   return (
     <>
-      <Text className="mb-64" style="h1">
-        2/3. Setup percentage values
+      <Text className="mb-64" style="h3">
+        2/3. Setup weights
       </Text>
       <div>
         <div className={s.track} {...getTrackProps()}>
@@ -106,8 +106,9 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
                 const { style, ...rest } = getSegmentProps()
 
                 return (
-                  <div className={s.segment} {...rest} style={{ ...style, background: colors[index] }}>
+                  <div className={s.segment} {...rest} style={style}>
                     <span className={s.segmentValue}>{value}%</span>
+                    <div className={s.segmentBg} style={{ background: colors[index] }} />
                   </div>
                 )
               })
@@ -142,7 +143,7 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
                 {
                   selectedVaultIds.length > 2 && (
                     <Button
-                      size={20}
+                      size={28}
                       style="tertiary"
                       onClick={() => handleRemove(index)}
                     >

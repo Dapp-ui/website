@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import { useState } from 'react'
-import { Container } from '@mui/material'
+
+import { WidthContainer } from 'components/layout'
 
 import { ContextProvider } from './utils/context'
 import { Step1, Step2, Step3 } from './components'
@@ -21,7 +22,7 @@ const CreateIndexPage: NextPage = () => {
 
   return (
     <ContextProvider>
-      <Container>
+      <WidthContainer>
         {
           step === 0 && (
             <Step1 onContinue={handleNextStep} />
@@ -37,7 +38,7 @@ const CreateIndexPage: NextPage = () => {
             <Step3 onBack={handlePrevStep} />
           )
         }
-      </Container>
+      </WidthContainer>
     </ContextProvider>
   )
 }

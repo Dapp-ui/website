@@ -1,44 +1,26 @@
 import type { NextPage } from 'next'
-import { useEffect } from 'react'
 import { useQuery } from 'hooks'
 import Link from 'next/link'
-import { Container, Button } from '@mui/material'
-import { getIndexContract } from 'contracts'
-import { fetchIndexData, getVault } from 'helpers'
+import { useVaults } from 'contexts'
+import { fetchIndexData } from 'helpers'
 import { useConnectWallet } from '@web3-onboard/react'
+
+import { WidthContainer } from 'components/layout'
+import { Text } from 'components/dataDisplay'
+import { Button } from 'components/inputs'
 
 import Position from './components/Position/Position'
 
 import s from './IndexPage.module.scss'
 
 
-const useFetchData = (address: string) => {
-  const cacheKey = `app-cache--index-${address}`
-  const storageData = localStorage.getItem(cacheKey)
-
-  const fetcher = () => {
-    return fetchIndexData(address)
-  }
-
-  let { isFetching, data } = useQuery({
-    endpoint: [ 'index', address ],
-    fetcher,
-    skip: Boolean(storageData),
-  })
-
-  data = storageData ? JSON.parse(storageData) : data
-
-  useEffect(() => {
-    if (!isFetching && data) {
-      localStorage.setItem(cacheKey, JSON.stringify(data))
-    }
-  }, [ isFetching, data ])
-
-  return {
-    isFetching,
-    data,
-  }
-}
+const colors = [
+  '#22ff85',
+  '#0be56c',
+  '#06c65c',
+  '#00af53',
+  '#00863c',
+]
 
 type IndexPageProps = {
   address: string
@@ -46,30 +28,57 @@ type IndexPageProps = {
 
 const IndexPage: NextPage<IndexPageProps> = ({ address }) => {
   const [ { wallet } ] = useConnectWallet()
-  const { isFetching, data } = useFetchData(address)
+  const { isVaultsFetching, vaultsMap } = useVaults()
 
-  const { owner, name, symbol, components } = data || {}
+  const fetcher = () => {
+    return fetchIndexData(address, vaultsMap)
+  }
+
+  let { isFetching, data } = useQuery({
+    endpoint: [ 'index', address ],
+    fetcher,
+    skip: !vaultsMap,
+  })
+
+  isFetching = isFetching || isVaultsFetching
+
+  const { owner, name, symbol, components, totalPrice, totalSupply } = data || {}
 
   const isOwner = wallet?.accounts?.[0].address.toLowerCase() === owner?.toLowerCase()
+  const totalWeight = components?.reduce((acc, { targetWeight }) => acc + targetWeight, 0)
 
   return (
-    <Container>
+    <WidthContainer>
       {
         isFetching ? (
           <div>Loading...</div>
         ) : (
           <div className={s.content}>
             <div>
-              <div>Name: <b>{name}</b></div>
-              <div>Symbol: <b>{symbol}</b></div>
+              <div className="flex justify-between mb-40">
+                <Text style="h3">{symbol} / {name}</Text>
+                <Text style="h3">APR 20%</Text>
+              </div>
+              <div className={s.share}>
+                {
+                  components.map(({ targetWeight }, index) => (
+                    <div
+                      key={index}
+                      className={s.shareItem}
+                      style={{ background: colors[index], width: `${targetWeight}%` }}
+                    />
+                  ))
+                }
+              </div>
               <div className="mt-20">
                 {
-                  components.map(({ vault: address, targetWeight }) => {
-                    const { protocol, tokenSymbol } = getVault(address)
+                  components.map(({ protocol, vault: address, tokenSymbol, targetWeight }, index) => {
+                    const share = parseFloat(Number(targetWeight / totalWeight * 100).toFixed(2))
 
                     return (
-                      <div key={address}>
-                        Protocol: <b>{protocol}</b>, Token: <b>{tokenSymbol}</b>, <b>{targetWeight}%</b>
+                      <div key={index} className={s.item}>
+                        <div className={s.square} style={{ background: colors[index] }} />
+                        <Text className={s.title} style="p1">{tokenSymbol} / {share}%</Text>
                       </div>
                     )
                   })
@@ -78,20 +87,29 @@ const IndexPage: NextPage<IndexPageProps> = ({ address }) => {
               {
                 isOwner && (
                   <Link href={`/indexes/${address}/edit`}>
-                    <a>
-                      <Button size="medium" variant="contained">Edit Index</Button>
+                    <a className="mt-40 block">
+                      <Button
+                        size={44}
+                        style="primary"
+                      >
+                        Edit Index
+                      </Button>
                     </a>
                   </Link>
                 )
               }
             </div>
             <div>
-              <Position indexAddress={address} />
+              <Position
+                indexAddress={address}
+                totalPrice={totalPrice}
+                totalSupply={totalSupply}
+              />
             </div>
           </div>
         )
       }
-    </Container>
+    </WidthContainer>
   )
 }
 

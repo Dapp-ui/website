@@ -1,4 +1,41 @@
 .content {
   display: grid;
+  grid-gap: 40px;
   grid-template-columns: auto 400px;
+}
+
+
+.share {
+  display: flex;
+}
+
+.shareItem {
+  height: 40px;
+}
+
+
+.items {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.square {
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+}
+
+.title {
+  width: 250px;
 }

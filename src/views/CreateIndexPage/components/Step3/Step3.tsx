@@ -80,8 +80,8 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
 
   return (
     <>
-      <Text className="mb-64" style="h1">
-        3/3. Setup percentage values
+      <Text className="mb-64" style="h3">
+        3/3. Final Step
       </Text>
       <div className={s.content}>
         <div className={s.info}>

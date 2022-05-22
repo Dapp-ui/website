@@ -1,8 +1,8 @@
 import type { AppProps } from 'next/app'
 import { useState, useEffect } from 'react'
+import { VaultsProvider } from 'contexts'
 import { SWRConfig } from 'swr'
 
-import { CssBaseline } from '@mui/material'
 import MainLayout from 'layouts/MainLayout/MainLayout'
 
 import '../scss/sanitize.scss'
@@ -23,13 +23,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <>
-      <CssBaseline />
       {
         isVisible && (
           <SWRConfig value={swrContext}>
-            <MainLayout>
-              <Component {...pageProps} />
-            </MainLayout>
+            <VaultsProvider>
+              <MainLayout>
+                <Component {...pageProps} />
+              </MainLayout>
+            </VaultsProvider>
           </SWRConfig>
         )
       }

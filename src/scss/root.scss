@@ -4,10 +4,11 @@ body {
   color: #141d29;
   font-weight: 400;
   font-size: 14px;
-  font-family: 'Eina 01', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 html {
+  //background-color: #1f1f1f;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -80,18 +81,6 @@ select:-moz-focusring {
 }
 
 select::-ms-expand {
-  display: none;
-}
-
-// hide yandex iframe for tab click
-iframe[name='_ym_native'] {
-  display: none;
-}
-
-// Hide pixels
-[width='0'][height='0'],
-[width='1'][height='1'],
-.text-ad {
   display: none;
 }
 

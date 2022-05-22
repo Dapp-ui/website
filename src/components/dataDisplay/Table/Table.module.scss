@@ -1,0 +1,40 @@
+.container {
+
+}
+
+.table {
+  width: 100%;
+  white-space: nowrap;
+  text-align: left;
+  border-collapse: collapse;
+  color: $gray-90;
+}
+
+.th {
+  padding: 8px 20px;
+  color: $gray-60;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.row {
+  border-top: 1px solid $gray-20;
+  cursor: pointer;
+
+  &:hover {
+
+    .td {
+      background-color: $bg-10;
+    }
+  }
+}
+
+.td {
+  padding: 20px;
+  font-size: 16px;
+  line-height: 24px;
+
+  &:last-child {
+    width: 1%;
+  }
+}

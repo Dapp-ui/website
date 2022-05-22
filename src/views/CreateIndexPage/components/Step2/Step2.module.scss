@@ -9,6 +9,12 @@
 .segment {
   position: relative;
   height: 100%;
+  padding: 0 8px;
+}
+
+.segmentBg {
+  height: 100%;
+  border-radius: 8px;
 }
 
 .segmentValue {
@@ -19,14 +25,24 @@
 }
 
 .handle {
-  background: #080808;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 13px;
   height: 20px;
   border-radius: 3px;
+  cursor: move;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  &::before {
+    display: block;
+    width: 5px;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    height: 100%;
+    content: '';
+  }
 }
 
 

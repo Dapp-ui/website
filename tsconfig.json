@@ -26,6 +26,7 @@
       "layouts/*": [ "src/layouts/*" ],
       "components/*": [ "src/components/*" ],
       "views/*": [ "src/views/*" ],
+      "contexts": [ "src/contexts" ],
       "hooks": [ "src/hooks" ],
     }
   },

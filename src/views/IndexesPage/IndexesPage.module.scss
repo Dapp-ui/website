@@ -1,5 +1,18 @@
-.items {
-  display: grid;
-  grid-gap: 20px;
-  grid-template-columns: repeat(3, 1fr);
+.content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.tag {
+  display: block;
+  margin-left: 4px;
+  padding: 2px 8px;
+  font-weight: 600;
+  font-size: 12px;
+  background-color: $gray-20;
+  border-radius: 2px;
+
+  &:first-child {
+    margin-left: 0;
+  }
 }

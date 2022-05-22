@@ -18,6 +18,7 @@ export const addresses = {
 
 export const decimals = {
   token: 6,
+  chainLink: 8,
 }
 
 export const initialBlocks = {
@@ -28,6 +29,10 @@ export const rpcProvider = new JsonRpcProvider(RPC_PROVIDER)
 
 export const getTokenContract = (provider = rpcProvider) => {
   return new Contract(addresses.token, USDTABI, provider) as unknown as USDT
+}
+
+export const getVaultContract = (address, provider = rpcProvider) => {
+  return new Contract(address, USDTABI, provider) as unknown as USDT
 }
 
 export const getFactoryContract = (provider = rpcProvider) => {

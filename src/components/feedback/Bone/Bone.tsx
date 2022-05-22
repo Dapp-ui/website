@@ -28,7 +28,7 @@ const Bone: React.FunctionComponent<BoneProps> = (props) => {
     const rootStyle: any = {}
 
     if (width) {
-      rootStyle.width = rootStyle.minWidth = `${width}rem`
+      rootStyle.width = rootStyle.minWidth = `${width}px`
     }
 
     if (percentWidth) {
@@ -36,7 +36,7 @@ const Bone: React.FunctionComponent<BoneProps> = (props) => {
     }
 
     if (height) {
-      rootStyle.height = rootStyle.minHeight = `${height}rem`
+      rootStyle.height = rootStyle.minHeight = `${height}px`
     }
 
     if (percentHeight) {

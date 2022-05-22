@@ -6,17 +6,13 @@ import s from './Text.module.scss'
 
 export const stylesMap = {
   header: [ 'h1', 'h2', 'h3', 'h4' ],
-  interface: [ 'i1', 'i2', 'i3', 'i4', 'i5' ],
-  body: [ 'p1', 'p2' ],
-  caption: [ 'c1', 'c2', 'c3', 'c4', 'c5' ],
   title: [ 't1', 't2' ],
+  body: [ 'p1', 'p2', 'p3' ],
 } as const
 
 export const styles = [
   ...stylesMap.header,
-  ...stylesMap.interface,
   ...stylesMap.body,
-  ...stylesMap.caption,
   ...stylesMap.title,
 ] as const
 

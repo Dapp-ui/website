@@ -37,14 +37,16 @@
   }
 }
 
+.h1, .h2, .h3, .h4 {
+  font-weight: 600;
+}
+
 .h1 {
-  font-weight: 300;
   font-size: 48px;
   line-height: 64px;
 }
 
 .h2 {
-  font-weight: 600;
   font-size: 36px;
   line-height: 52px;
 }
@@ -55,84 +57,24 @@
 }
 
 .h4 {
-  font-weight: 600;
   font-size: 18px;
   line-height: 28px;
 }
 
 
-.i1, .i2, .i3, .i4, .i5 {
-  font-weight: 600;
-}
-
-.i1 {
-  font-size: 16px;
-  line-height: 28px;
-}
-
-.i2 {
-  font-size: 14px;
-  line-height: 24px;
-}
-
-.i3 {
-  font-size: 14px;
-  line-height: 16px;
-}
-
-.i4 {
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 0.08em;
-}
-
-.i5 {
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-
 .p1 {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 18px;
+  line-height: 28px;
 }
 
 .p2 {
-  font-size: 14px;
-  line-height: 20px;
-}
-
-
-.c1 {
   font-size: 16px;
-  line-height: 32px;
+  line-height: 24px;
 }
 
-.c2 {
-  font-size: 14px;
-  line-height: 28px;
-  letter-spacing: 0.01em;
-}
-
-.c3 {
+.p3 {
   font-size: 14px;
   line-height: 20px;
-}
-
-.c4 {
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 24px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.c5 {
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 24px;
 }
 
 
