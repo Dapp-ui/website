@@ -7,7 +7,7 @@ import type { VaultsContextState } from 'contexts'
 
 type State = {
   selectedVaultIds: string[]
-  percentageDistribution: number[]
+  shares: number[]
 }
 
 export type ContextState = VaultsContextState & State
@@ -21,7 +21,7 @@ export const ContextProvider = ({ children }) => {
 
   const [ state, setState ] = useReducerState<State>({
     selectedVaultIds: null,
-    percentageDistribution: null,
+    shares: null,
   })
 
   const contextState = {

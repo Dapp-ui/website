@@ -13,7 +13,13 @@ import { useContext } from '../../utils/context'
 import s from './Step2.module.scss'
 
 
-const getInitialDistribution = (count: number) => {
+// [ 20, 30, 50 ] => [ 20, 50 ]
+const getValuesFromShares = (initialShares: number[]) => {
+  let prevValue = 0
+  return initialShares.slice(0, -1).map((share) => prevValue += share)
+}
+
+const getInitialValues = (count: number) => {
   const minValue = Math.floor(100 / count - 1)
   let currValue = 0
 
@@ -28,23 +34,27 @@ const getInitialDistribution = (count: number) => {
   })
 }
 
+// [ 20, 50 ] => [ 20, 30, 50 ]
+const getSharesFromValues = (values: number[]) => {
+  return values.concat(100).map((value, index) => {
+    const prevValue = values[index - 1] || 0
+    return value - prevValue
+  })
+}
+
 type Step2Props = {
   onBack: () => void
   onContinue: () => void
 }
 
 const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
-  const [ { vaultsMap, selectedVaultIds, percentageDistribution }, setContextState ] = useContext()
+  const [ { vaultsMap, selectedVaultIds, shares: initialShares }, setContextState ] = useContext()
 
-  const initialValue = percentageDistribution || getInitialDistribution(selectedVaultIds.length)
+  const initialValues = initialShares ? getValuesFromShares(initialShares) : getInitialValues(selectedVaultIds.length)
 
-  const [ values, setValues ] = useState(initialValue)
+  const [ values, setValues ] = useState(initialValues)
 
-  useEffect(() => {
-    setValues(getInitialDistribution(selectedVaultIds.length))
-  }, [ selectedVaultIds ])
-
-  const { getTrackProps, ticks, segments, handles } = useRanger({
+  const { getTrackProps, segments, handles } = useRanger({
     min: 0,
     max: 100,
     stepSize: 1,
@@ -52,28 +62,8 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
     onDrag: setValues,
   })
 
-  const selectedVaults = useMemo(() => {
-    const vaults = Object.values(vaultsMap)
-    return selectedVaultIds.map((id) => vaults.find((item) => item.address === id)).sort((a, b) => a.apy - b.apy)
-  }, [ selectedVaultIds ])
-
-  const handleRemove = (index) => {
-    setContextState(({ selectedVaultIds }) => ({
-      selectedVaultIds: selectedVaultIds.filter((_, i) => i !== index),
-    }))
-  }
-
-  const handleContinue = () => {
-    setContextState({ percentageDistribution: values })
-    onContinue()
-  }
-
-  const shares = selectedVaults.map((_, index) => {
-    const prevValue = values[index - 1] || 0
-    const currValue = index === selectedVaultIds.length - 1 ? 100 : values[index]
-
-    return currValue - prevValue
-  })
+  const selectedVaults = selectedVaultIds.map((address) => vaultsMap[address])
+  const shares = getSharesFromValues(values)
 
   let totalAPR = shares.reduce((acc, value, index) => {
     const { apy } = selectedVaults[index]
@@ -82,6 +72,20 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
   }, 0)
 
   totalAPR = totalAPR ? +Number(totalAPR).toFixed(2) : totalAPR
+
+  const handleRemove = (index) => {
+    setContextState(({ selectedVaultIds }) => ({
+      selectedVaultIds: selectedVaultIds.filter((_, i) => i !== index),
+      percentageDistribution: null,
+    }))
+
+    setValues(getInitialValues(selectedVaultIds.length - 1))
+  }
+
+  const handleContinue = () => {
+    setContextState({ shares })
+    onContinue()
+  }
 
   return (
     <>
@@ -95,17 +99,11 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
           <div className={s.segments}>
             {
               segments.map(({ getSegmentProps }, index) => {
-                let value = values[index] - (values[index - 1] || 0)
-
-                if (index === values.length) {
-                  value = 100 - values[values.length - 1]
-                }
-
                 const { style, ...rest } = getSegmentProps()
 
                 return (
                   <div className={s.segment} {...rest} style={style}>
-                    <span className={s.segmentValue}>{value}%</span>
+                    <span className={s.segmentValue}>{shares[index]}%</span>
                     <div className={s.segmentBg} style={{ background: colors[index] }} />
                   </div>
                 )

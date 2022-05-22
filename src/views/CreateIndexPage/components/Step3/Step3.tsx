@@ -24,33 +24,21 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
   const router = useRouter()
   const [ { wallet }, connect ] = useConnectWallet()
   const [ { connectedChain } ] = useSetChain()
-  const [ { vaultsMap, selectedVaultIds, percentageDistribution } ] = useContext()
+  const [ { vaultsMap, selectedVaultIds, shares } ] = useContext()
   const [ isSubmitting, setSubmitting ] = useState(false)
 
   const chainId = connectedChain?.id ? parseInt(connectedChain?.id) : null
   const isWrongNetwork = chainId !== 250
 
-  const vaults = Object.values(vaultsMap)
-  let selectedVaults = selectedVaultIds.map((id) => vaults.find((item) => item.address === id)) as any
+  let selectedVaults = selectedVaultIds.map((address, index) => ({
+    ...vaultsMap[address],
+    share: shares[index],
+  })) as any
 
-  const vaultShares = selectedVaults.map((_, index) => {
-    const prevValue = percentageDistribution[index - 1] || 0
-    const currValue = index === selectedVaultIds.length - 1 ? 100 : percentageDistribution[index]
+  selectedVaults = selectedVaults.sort((a, b) => b.share - a.share)
 
-    return currValue - prevValue
-  })
-
-  selectedVaults = selectedVaults.map((vault, index) => ({
-    ...vault,
-    share: vaultShares[index],
-  })).sort((a, b) => b.share - a.share)
-
-  let totalAPY = percentageDistribution.reduce((acc, value, index) => {
-    const { apy } = selectedVaults[index]
-
-    const percentage = !index ? value : value - percentageDistribution[index - 1]
-
-    return acc += apy * percentage / 100
+  let totalAPY = selectedVaults.reduce((acc, vault) => {
+    return acc += vault.apy * vault.share / 100
   }, 0)
 
   totalAPY = totalAPY ? +Number(totalAPY).toFixed(2) : totalAPY
@@ -77,18 +65,10 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
       const factoryContract = getFactoryContract(provider.getSigner() as any)
 
       const components = (
-        selectedVaultIds
-          .map((id) => vaults.find((item) => item.address === id))
-          .map(({ address }, index) => {
-            const prevValue = percentageDistribution[index - 1] || 0
-            const currValue = index === selectedVaultIds.length - 1 ? 100 : percentageDistribution[index]
-            let targetWeight = currValue - prevValue
-
-            return {
-              vault: address,
-              targetWeight,
-            }
-          })
+        selectedVaults.map(({ address, share }) => ({
+          vault: address,
+          targetWeight: share,
+        }))
       )
 
       if (!components?.length) {
