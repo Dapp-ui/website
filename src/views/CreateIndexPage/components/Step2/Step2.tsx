@@ -68,12 +68,17 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
     onContinue()
   }
 
-  let totalAPR = values.reduce((acc, value, index) => {
+  const shares = selectedVaults.map((_, index) => {
+    const prevValue = values[index - 1] || 0
+    const currValue = index === selectedVaultIds.length - 1 ? 100 : values[index]
+
+    return currValue - prevValue
+  })
+
+  let totalAPR = shares.reduce((acc, value, index) => {
     const { apy } = selectedVaults[index]
 
-    const percentage = !index ? value : value - values[index - 1]
-
-    return acc += apy * percentage / 100
+    return acc += apy * value / 100
   }, 0)
 
   totalAPR = totalAPR ? +Number(totalAPR).toFixed(2) : totalAPR

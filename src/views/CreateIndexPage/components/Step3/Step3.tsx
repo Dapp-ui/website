@@ -33,7 +33,7 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
   const vaults = Object.values(vaultsMap)
   let selectedVaults = selectedVaultIds.map((id) => vaults.find((item) => item.address === id)) as any
 
-  const vaultShares = selectedVaults.map(({ address }, index) => {
+  const vaultShares = selectedVaults.map((_, index) => {
     const prevValue = percentageDistribution[index - 1] || 0
     const currValue = index === selectedVaultIds.length - 1 ? 100 : percentageDistribution[index]
 
