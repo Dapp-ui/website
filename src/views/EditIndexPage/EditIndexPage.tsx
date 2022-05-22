@@ -8,7 +8,7 @@ const EditIndexPage: React.FC = () => {
 
   return (
     <Container>
-      <div>111</div>
+      <div>%SOON%</div>
     </Container>
   )
 }
