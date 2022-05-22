@@ -53,7 +53,7 @@ const NotificationBase: React.FunctionComponent<React.PropsWithChildren<Notifica
         type="button"
         onClick={handleClick}
       >
-        <Icon name="interface/dismiss" size={12} />
+        <Icon name="interface/close" size={12} />
       </button>
       {children}
     </div>
