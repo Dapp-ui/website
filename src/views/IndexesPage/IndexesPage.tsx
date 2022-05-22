@@ -15,6 +15,8 @@ import { Button } from 'components/inputs'
 import s from './IndexesPage.module.scss'
 
 
+const hiddenIndexes = [ '0x4Af994BA04Fe0Bf9d446247Fe2e8c0992e3d6080' ]
+
 type RowData = {
   address: string
   name: string
@@ -50,7 +52,7 @@ const IndexesPage: NextPage = () => {
       return fetchIndexData(indexAddress, vaultsMap)
     }))
 
-    return items.filter(Boolean)
+    return items.filter(Boolean).filter((index) => !hiddenIndexes.includes(index.address))
   }
 
   let { isFetching, data } = useQuery({

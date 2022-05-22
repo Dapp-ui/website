@@ -6,10 +6,12 @@ import type { PlainNotificationProps } from '../PlainNotification/PlainNotificat
 import s from './ErrorNotification.module.scss'
 
 
+const defaultText = 'Something went wrong. Please <a href="https://github.com/ETHHackathon2022/website/issues/new">create a Issue</a>.'
+
 type ErrorNotificationProps = Partial<PlainNotificationProps>
 
 const ErrorNotification: React.FunctionComponent<ErrorNotificationProps> = (props) => {
-  const { title = 'Error', text = 'Something went wrong' } = props
+  const { title = 'Error', text = defaultText } = props
 
   return (
     <PlainNotification

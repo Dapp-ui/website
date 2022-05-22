@@ -91,6 +91,11 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
           })
       )
 
+      if (!components?.length) {
+        openNotification('error')
+        return
+      }
+
       const receipt = await factoryContract.createIndex(name, symbol, components)
       const txHash = await receipt.wait()
 
