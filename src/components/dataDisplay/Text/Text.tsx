@@ -22,6 +22,8 @@ export const colors = [
   'gray-90',
   'gray-60',
   'gray-40',
+  'gray-20',
+  'gray-10',
   'gray-5',
   'accent-green-90',
   'accent-red-90',

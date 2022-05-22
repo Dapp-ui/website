@@ -1,15 +1,100 @@
-.items {
-  display: grid;
-  grid-gap: 4px;
-  grid-template-columns: repeat(3, 1fr);
-}
+.table {
+  margin: 0 -20px;
 
-.item {
-  display: flex !important;
-  justify-content: flex-start !important;
-  width: 100% !important;
+  td {
 
-  &.selected {
-    background-color: #eee;
+    &:first-child {
+      width: 1%;
+    }
   }
 }
+
+.checkbox {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border: 2px solid $bg-60;
+  border-radius: 4px;
+
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    margin: auto;
+    display: block;
+    background-color: $brand-90;
+    border-radius: 2px;
+    opacity: 0;
+    content: '';
+  }
+
+  &:hover {
+    border-color: $bg-20;
+  }
+}
+
+.activeRow {
+
+  td {
+    background-color: rgb(255 0 160 / 14%) !important;
+    @include basic-transition();
+  }
+
+  .checkbox {
+    border-width: 1px;
+    border-color: $brand-90;
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:hover {
+
+    td {
+      background-color: rgb(255 0 160 / 25%) !important;
+    }
+  }
+}
+
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 64px;
+  margin-right: -20px;
+}
+
+.errorContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 64px;
+  margin-right: -26px;
+}
+
+.errorContent {
+  display: flex;
+  padding: 6px;
+  background-color: $bg-80;
+  border-radius: 20px;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  margin-right: 8px;
+  padding: 0 20px;
+  font-size: 18px;
+
+  span {
+    padding-left: 8px;
+    font-weight: 700;
+    color: $brand-90;
+  }
+}
+

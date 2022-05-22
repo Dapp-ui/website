@@ -52,22 +52,22 @@
     &:not(.disabled) {
 
       &:hover {
-        background-color: $brand-60;
+        background-color: $brand-90;
       }
     }
   }
 
   &.disabled {
-    background: $brand-40;
+    background: #5e284c;
   }
 }
 
 .secondary {
   color: $gray-80;
-  background-color: $gray-20;
+  background-color: $bg-70;
 
   &:hover {
-    background-color: $gray-40;
+    background-color: $bg-60;
   }
 
   &.disabled {
@@ -96,6 +96,7 @@
   padding: 0 12px;
   font-weight: 600;
   font-size: 12px;
+  border-radius: 6px;
 }
 
 .size-32 {
@@ -103,6 +104,7 @@
   padding: 0 16px;
   font-weight: 700;
   font-size: 14px;
+  border-radius: 8px;
 }
 
 .size-44 {
@@ -110,6 +112,7 @@
   padding: 0 18px;
   font-weight: 700;
   font-size: 15px;
+  border-radius: 10px;
 }
 
 .size-48 {
@@ -117,6 +120,7 @@
   padding: 0 18px;
   font-weight: 700;
   font-size: 15px;
+  border-radius: 12px;
 }
 
 .size-56 {
@@ -124,4 +128,5 @@
   padding: 0 20px;
   font-weight: 700;
   font-size: 16px;
+  border-radius: 14px;
 }

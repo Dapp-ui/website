@@ -1,16 +1,22 @@
-.content {
-  max-width: 1000px;
-  margin: 0 auto;
+.table {
+  margin: 0 -20px;
+
+  td {
+
+    &:last-child {
+      width: 1%;
+    }
+  }
 }
 
 .tag {
   display: block;
-  margin-left: 4px;
-  padding: 2px 8px;
-  font-weight: 600;
-  font-size: 12px;
-  background-color: $gray-20;
-  border-radius: 2px;
+  margin-left: 6px;
+  padding: 2px 12px;
+  font-weight: 700;
+  font-size: 14px;
+  background-color: #271863;
+  border-radius: 100px;
 
   &:first-child {
     margin-left: 0;

@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-key */
 import React, { useMemo, useState, useEffect } from 'react'
 import { useRanger } from 'react-ranger'
+import { colors } from 'helpers'
 import cx from 'classnames'
 
 import { Button } from 'components/inputs'
@@ -10,14 +11,6 @@ import { useContext } from '../../utils/context'
 
 import s from './Step2.module.scss'
 
-
-const colors = [
-  '#15e3ff',
-  '#2bf885',
-  '#fffb5f',
-  '#e571ff',
-  '#b2ff37',
-]
 
 const getInitialDistribution = (count: number) => {
   const minValue = Math.floor(100 / count - 1)
@@ -40,8 +33,9 @@ type Step2Props = {
 }
 
 const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
-  const [ { vaults, selectedVaultIds, percentageDistribution }, setContextState ] = useContext()
+  const [ { vaultsMap, selectedVaultIds, percentageDistribution }, setContextState ] = useContext()
 
+  const vaults = Object.values(vaultsMap)
   const initialValue = percentageDistribution || getInitialDistribution(selectedVaultIds.length)
 
   const [ values, setValues ] = useState(initialValue)
@@ -78,7 +72,10 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
   }
 
   let totalAPR = values.reduce((acc, value, index) => {
-    const { apr } = selectedVaults[index]
+    // TODO add APR - added on 5/22/22 by pavelivanov
+    // const { apr } = selectedVaults[index]
+
+    const apr = 27
 
     const percentage = !index ? value : value - values[index - 1]
 
@@ -89,10 +86,9 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
 
   return (
     <>
-      <Text className="mb-64" style="h3">
-        2/3. Setup weights
-      </Text>
-      <div>
+      <Text style="h3">2/3. Setup weights</Text>
+      <Text className="mb-80" style="h4" color="gray-20">Setup selected vaults weight</Text>
+      <div className="pt-20">
         <div className={s.track} {...getTrackProps()}>
           <div className={s.segments}>
             {
@@ -134,17 +130,17 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
       </div>
       <div className="mt-32">
         {
-          selectedVaults.map(({ protocol, tokenSymbol }, index) => {
+          selectedVaults.map(({ protocol, tokenName }, index) => {
 
             return (
               <div key={index} className={s.item}>
                 <div className={s.square} style={{ background: colors[index] }} />
-                <Text className={s.title} style="p1">Protocol: <b>{protocol}</b>, Token: <b>{tokenSymbol}</b></Text>
+                <Text className={s.title} style="p1">{tokenName}</Text>
                 {
                   selectedVaultIds.length > 2 && (
                     <Button
                       size={28}
-                      style="tertiary"
+                      style="secondary"
                       onClick={() => handleRemove(index)}
                     >
                       Remove
@@ -156,18 +152,18 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
           })
         }
       </div>
-      <div className="flex justify-between mt-56">
+      <div className="flex items-center justify-between mt-64">
         <Button
-          size={44}
-          style="tertiary"
+          size={56}
+          style="secondary"
           onClick={handleBack}
         >
           Go Back
         </Button>
-        <div className="flex">
-          <div className={s.totalAPR}>Total APR: {totalAPR}%</div>
+        <div className={s.total}>
+          <div className={s.totalAPR}>Summary APY <span>{totalAPR}%</span></div>
           <Button
-            size={44}
+            size={56}
             style="primary"
             onClick={handleContinue}
           >

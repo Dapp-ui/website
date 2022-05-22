@@ -30,14 +30,10 @@ const Header: React.FC = () => {
         <div className={s.nav}>
           {
             nav.map(({ title, link, toTab }) => {
-              const content = (
-                <Text style="p1">{title}</Text>
-              )
-
               if (toTab) {
                 return (
                   <a key={title} href={toTab} target="_blank" rel="noreferrer">
-                    {content}
+                    {title}
                   </a>
                 )
               }
@@ -45,7 +41,7 @@ const Header: React.FC = () => {
               return (
                 <ActiveLink key={title} href={link} activeClassName={s.active} exact>
                   <a>
-                    {content}
+                    {title}
                   </a>
                 </ActiveLink>
               )

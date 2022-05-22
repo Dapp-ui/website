@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import { useQuery } from 'hooks'
 import Link from 'next/link'
 import { useVaults } from 'contexts'
-import { fetchIndexData } from 'helpers'
+import { fetchIndexData, colors } from 'helpers'
 import { useConnectWallet } from '@web3-onboard/react'
 
 import { WidthContainer } from 'components/layout'
@@ -13,14 +13,6 @@ import Position from './components/Position/Position'
 
 import s from './IndexPage.module.scss'
 
-
-const colors = [
-  '#22ff85',
-  '#0be56c',
-  '#06c65c',
-  '#00af53',
-  '#00863c',
-]
 
 type IndexPageProps = {
   address: string
@@ -55,53 +47,57 @@ const IndexPage: NextPage<IndexPageProps> = ({ address }) => {
         ) : (
           <div className={s.content}>
             <div>
-              <div className="flex justify-between mb-40">
-                <Text style="h3">{symbol} / {name}</Text>
-                <Text style="h3">APR 20%</Text>
-              </div>
-              <div className={s.share}>
-                {
-                  components.map(({ targetWeight }, index) => (
-                    <div
-                      key={index}
-                      className={s.shareItem}
-                      style={{ background: colors[index], width: `${targetWeight}%` }}
-                    />
-                  ))
-                }
-              </div>
-              <div className="mt-20">
-                {
-                  components.map(({ protocol, vault: address, tokenSymbol, targetWeight }, index) => {
-                    const share = parseFloat(Number(targetWeight / totalWeight * 100).toFixed(2))
+              <Text style="h3" color="brand-70">{symbol} / {name}</Text>
+              <div className="mt-40">
+                <Text className="mb-24" style="h4">Tokens weight</Text>
+                <div className={s.share}>
+                  {
+                    components.map(({ targetWeight }, index) => (
+                      <div
+                        key={index}
+                        className={s.shareItem}
+                        style={{ background: colors[index], width: `${targetWeight}%` }}
+                      />
+                    ))
+                  }
+                </div>
+                <div className="mt-20">
+                  {
+                    components.map(({ protocol, vault: address, tokenSymbol, targetWeight }, index) => {
+                      const share = parseFloat(Number(targetWeight / totalWeight * 100).toFixed(2))
 
-                    return (
-                      <div key={index} className={s.item}>
-                        <div className={s.square} style={{ background: colors[index] }} />
-                        <Text className={s.title} style="p1">{tokenSymbol} / {share}%</Text>
-                      </div>
-                    )
-                  })
-                }
+                      return (
+                        <div key={index} className={s.item}>
+                          <div className={s.square} style={{ background: colors[index] }} />
+                          <Text className={s.title} style="p1">{tokenSymbol}&nbsp;&nbsp;&nbsp;<span className="color-gray-20">{share}%</span></Text>
+                        </div>
+                      )
+                    })
+                  }
+                </div>
               </div>
               {
                 isOwner && (
-                  <Link href={`/indexes/${address}/edit`}>
-                    <a className="mt-40 block">
-                      <Button
-                        size={44}
-                        style="primary"
-                      >
-                        Edit Index
-                      </Button>
-                    </a>
-                  </Link>
+                  <div className="mt-40">
+                    <Text className="mb-24" style="h4">You are the owner of this Index</Text>
+                    <Link href={`/indexes/${address}/edit`}>
+                      <a className="block">
+                        <Button
+                          size={44}
+                          style="primary"
+                        >
+                          Edit Index
+                        </Button>
+                      </a>
+                    </Link>
+                  </div>
                 )
               }
             </div>
             <div>
               <Position
                 indexAddress={address}
+                indexSymbol={symbol}
                 totalPrice={totalPrice}
                 totalSupply={totalSupply}
               />

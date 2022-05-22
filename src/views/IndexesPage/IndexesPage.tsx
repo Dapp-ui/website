@@ -133,7 +133,7 @@ const IndexesPage: NextPage = () => {
 
           return (
             <Button
-              size={28}
+              size={32}
               style="primary"
             >
               Deposit

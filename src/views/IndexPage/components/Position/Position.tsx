@@ -18,11 +18,12 @@ import s from './Position.module.scss'
 
 type PositionProps = {
   indexAddress: string
+  indexSymbol: string
   totalPrice: string
   totalSupply: string
 }
 
-const Position: React.FC<PositionProps> = ({ indexAddress, totalPrice, totalSupply }) => {
+const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPrice, totalSupply }) => {
   const [ { wallet } ] = useConnectWallet()
   const [ { connectedChain } ] = useSetChain()
   const [ view, setView ] = useState('deposit')
@@ -113,13 +114,11 @@ const Position: React.FC<PositionProps> = ({ indexAddress, totalPrice, totalSupp
     const tokenContract = getTokenContract()
 
     const [
-      indexSymbol,
       indexDecimals,
       rawIndexBalance,
       rawBalance,
       rawAllowance,
     ] = await Promise.all([
-      indexContract.symbol(),
       indexContract.decimals(),
       indexContract.balanceOf(account),
       tokenContract.balanceOf(account),
@@ -131,7 +130,6 @@ const Position: React.FC<PositionProps> = ({ indexAddress, totalPrice, totalSupp
     const allowance = formatUnits(rawAllowance, decimals.token)
 
     return {
-      indexSymbol,
       indexDecimals,
       indexBalance,
       balance,
@@ -145,7 +143,7 @@ const Position: React.FC<PositionProps> = ({ indexAddress, totalPrice, totalSupp
     skip: !account,
   })
 
-  const { indexSymbol, indexDecimals, indexBalance, balance, allowance } = data || {}
+  const { indexDecimals, indexBalance, balance, allowance } = data || {}
 
   const isZeroAmount = !parseFloat(amount)
   const isInsufficientBalance = compare(amount, '>', balance)
@@ -175,8 +173,16 @@ const Position: React.FC<PositionProps> = ({ indexAddress, totalPrice, totalSupp
   return (
     <Card>
       <div className="mb-20">
-          <Text style="p2" color="gray-60">Your position</Text>
-          <Text style="h4">{formatStringNumber(indexBalance, 15)} {indexSymbol} <span className="color-gray-60">(${userBalanceInUSD})</span></Text>
+        <Text style="p2" color="gray-60">Your position</Text>
+        <Text style="h4">
+          {
+            indexBalance === undefined || indexBalance === null ? (
+              <>N/A</>
+            ) : (
+              <>{formatStringNumber(indexBalance, 15)} {indexSymbol} <span className="color-gray-60">(${userBalanceInUSD})</span></>
+            )
+          }
+        </Text>
       </div>
       <div className={s.tabs}>
         <Text
@@ -201,7 +207,9 @@ const Position: React.FC<PositionProps> = ({ indexAddress, totalPrice, totalSupp
       <div className="mt-32">
         {
           view === 'deposit' && (
-            <Text className="mb-8" style="p3" color="gray-60">Your balance: <b>{formatStringNumber(balance)} fUSDT</b></Text>
+            <Text className="mb-8" style="p3" color="gray-60">
+              Your balance: <b>{balance ? formatStringNumber(balance) : 0} fUSDT</b>
+            </Text>
           )
         }
         <AmountInput

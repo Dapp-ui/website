@@ -1,14 +1,14 @@
 html,
 body {
   height: 100%;
-  color: #141d29;
-  font-weight: 400;
+  color: $gray-80;
+  font-weight: 500;
   font-size: 14px;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 html {
-  //background-color: #1f1f1f;
+  background-color: $bg-90;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }

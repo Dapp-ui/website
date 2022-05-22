@@ -1,28 +1,30 @@
 .logo {
   display: flex;
   align-items: center;
-  font-size: 22px;
+  font-weight: 700;
+  font-size: 26px;
 
   &:any-link {
-    color: #000;
+    color: #fff;
     text-decoration: none;
   }
 
   img {
     display: block;
-    width: 32px;
+    width: 44px;
     margin-right: 12px;
   }
 }
 
 .nav {
   display: flex;
+  font-size: 20px;
 
   a {
-    margin-left: 24px;
+    margin-left: 32px;
 
     &:any-link {
-      color: $gray-60;
+      color: #fff;
       text-decoration: none;
     }
 
@@ -31,11 +33,11 @@
     }
 
     &:hover {
-      color: $gray-80;
+      color: $brand-60;
     }
 
     &.active {
-      color: $gray-90;
+      color: $brand-70;
     }
   }
 }

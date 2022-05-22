@@ -166,7 +166,7 @@ const AmountInput: React.FunctionComponent<InputProps> = (props) => {
         <Text
           className={s.label}
           style="p2"
-          color={errorLabel ? 'accent-red-90' : 'gray-40'}
+          color={errorLabel ? 'accent-red-90' : 'gray-10'}
         >
           {errorLabel || label}
         </Text>

@@ -21,6 +21,7 @@
   position: absolute;
   bottom: calc(100% + 4px);
   left: 50%;
+  font-size: 24px;
   transform: translateX(-50%);
 }
 
@@ -29,7 +30,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 13px;
+  width: 15px;
   height: 20px;
   border-radius: 3px;
   cursor: move;
@@ -38,8 +39,8 @@
   &::before {
     display: block;
     width: 5px;
-    border-left: 1px solid #000;
-    border-right: 1px solid #000;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
     height: 100%;
     content: '';
   }
@@ -56,6 +57,7 @@
   display: flex;
   align-items: center;
   margin-top: 10px;
+  padding-left: 20px;
 
   &:first-child {
     margin-top: 0;
@@ -66,6 +68,7 @@
   width: 24px;
   height: 24px;
   margin-right: 12px;
+  border-radius: 100px;
 }
 
 .title {
@@ -73,12 +76,24 @@
 }
 
 
+.total {
+  display: flex;
+  padding: 6px;
+  background-color: $bg-80;
+  border-radius: 20px;
+}
+
 .totalAPR {
   display: flex;
   align-items: center;
-  height: 44px;
+  height: 56px;
+  margin-right: 8px;
   padding: 0 20px;
-  font-weight: 700;
-  font-size: 15px;
-  background-color: $gray-10;
+  font-size: 18px;
+
+  span {
+    padding-left: 8px;
+    font-weight: 700;
+    color: $brand-90;
+  }
 }

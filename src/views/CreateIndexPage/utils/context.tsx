@@ -1,35 +1,38 @@
 import React from 'react'
 import { useReducerState } from 'hooks'
 import type { SetState } from 'hooks'
-import { vaults } from 'helpers'
+import { useVaults } from 'contexts'
+import type { VaultsContextState } from 'contexts'
 
-
-type Vaults = {
-  address: string
-  protocol: string
-  tokenSymbol: string
-  apr: number
-}[]
 
 type State = {
-  vaults: Vaults
   selectedVaultIds: string[]
   percentageDistribution: number[]
 }
 
-const Context = React.createContext<[ State, SetState<State> ]>(null)
+export type ContextState = VaultsContextState & State
+
+const Context = React.createContext<[ ContextState, SetState<State> ]>(null)
 
 export const useContext = () => React.useContext(Context)
 
 export const ContextProvider = ({ children }) => {
-  const context = useReducerState<State>({
-    vaults,
+  const { isVaultsFetching, vaultsMap, vaultAddresses } = useVaults()
+
+  const [ state, setState ] = useReducerState<State>({
     selectedVaultIds: null,
     percentageDistribution: null,
   })
 
+  const contextState = {
+    ...state,
+    isVaultsFetching,
+    vaultsMap,
+    vaultAddresses,
+  }
+
   return (
-    <Context.Provider value={context}>
+    <Context.Provider value={[ contextState, setState ]}>
       {children}
     </Context.Provider>
   )

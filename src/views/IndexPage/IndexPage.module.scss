@@ -7,10 +7,14 @@
 
 .share {
   display: flex;
+  margin: 0 -2px;
 }
 
 .shareItem {
-  height: 40px;
+  position: relative;
+  height: 10px;
+  margin-left: 2px;
+  border-radius: 100px;
 }
 
 
@@ -31,11 +35,8 @@
 }
 
 .square {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   margin-right: 12px;
-}
-
-.title {
-  width: 250px;
+  border-radius: 100px;
 }

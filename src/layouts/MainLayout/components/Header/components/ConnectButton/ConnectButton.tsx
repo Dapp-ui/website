@@ -142,7 +142,7 @@ const ConnectButton: React.FC = () => {
     return (
       <Button
         className={s.wrongNetworkButton}
-        size={32}
+        size={44}
         onClick={changeNetwork}
       >
         Wrong network
@@ -153,7 +153,7 @@ const ConnectButton: React.FC = () => {
   if (wallet) {
     return (
       <Button
-        size={32}
+        size={44}
         style="secondary"
         onClick={() => disconnect(wallet)}
       >
@@ -164,7 +164,7 @@ const ConnectButton: React.FC = () => {
 
   return (
     <Button
-      size={32}
+      size={44}
       style="primary"
       disabled={connecting}
       onClick={() => connect({})}

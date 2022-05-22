@@ -1,9 +1,42 @@
 .content {
-  max-width: 500px;
-  margin: 0 auto;
+  display: grid;
+  grid-gap: 100px;
+  justify-content: center;
+  grid-template-columns: 400px 400px;
 }
 
-.info {
-  padding: 20px;
-  background-color: $gray-10;
+.totalAPY {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding: 0 22px;
+  font-size: 24px;
+
+  b {
+    font-weight: 700;
+  }
+}
+
+.vaults {
+
+}
+
+.vault {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 10px 22px;
+  color: $bg-90;
+  font-weight: 700;
+  font-size: 18px;
+  border-radius: 100px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
 }

@@ -3,7 +3,6 @@
 }
 
 .table {
-  width: 100%;
   white-space: nowrap;
   text-align: left;
   border-collapse: collapse;
@@ -11,30 +10,44 @@
 }
 
 .th {
-  padding: 8px 20px;
-  color: $gray-60;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 8px 20px 16px;
+  color: $gray-10;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .row {
-  border-top: 1px solid $gray-20;
   cursor: pointer;
+
+  &:nth-child(odd) {
+
+    .td {
+      background-color: #100a2a;
+    }
+  }
 
   &:hover {
 
     .td {
-      background-color: $bg-10;
+      background-color: $bg-80;
     }
   }
 }
 
 .td {
-  padding: 20px;
-  font-size: 16px;
-  line-height: 24px;
+  padding: 28px 20px;
+  font-size: 18px;
+  line-height: 28px;
+  border-top: 2px solid $bg-90;
+  border-bottom: 2px solid $bg-90;
+  background-color: transparent;
+  @include basic-transition();
+
+  &:first-child {
+    border-radius: 20px 0 0 20px;
+  }
 
   &:last-child {
-    width: 1%;
+    border-radius: 0 20px 20px 0;
   }
 }
