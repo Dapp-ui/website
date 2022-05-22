@@ -104,6 +104,7 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
         title: 'Success!',
         text: 'Your index was successfully created!',
       })
+      localStorage.removeItem('index-club-indexes-cache')
       router.push('/indexes') // TODO push to index page - added on 5/22/22 by pavelivanov
     }
     catch (err) {
