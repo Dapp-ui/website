@@ -1,6 +1,7 @@
 .content {
   display: grid;
   grid-gap: 100px;
+  align-items: center;
   justify-content: center;
   grid-template-columns: 400px 400px;
 }
@@ -18,20 +19,22 @@
 }
 
 .vaults {
-
-}
-
-.vault {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-  padding: 10px 22px;
-  color: $bg-90;
-  font-weight: 700;
+  width: 100%;
   font-size: 18px;
-  border-radius: 100px;
 
-  &:first-child {
-    margin-top: 0;
+  th {
+    color: $gray-20;
+  }
+
+  th, td {
+    padding: 12px 20px;
+
+    &:first-child {
+      text-align: left;
+    }
+
+    &:last-child {
+      text-align: right;
+    }
   }
 }

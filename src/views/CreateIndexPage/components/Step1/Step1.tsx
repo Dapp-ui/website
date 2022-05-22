@@ -97,7 +97,7 @@ const Step1: React.FC<Step1Props> = ({ onContinue }) => {
             return <Bone w={40} h={16} />
           }
 
-          return apy ? <b>${apy}%</b> : 'N/A'
+          return apy ? <b className="color-brand-90">{apy}%</b> : 'N/A'
         },
       },
     ]
@@ -150,7 +150,7 @@ const Step1: React.FC<Step1Props> = ({ onContinue }) => {
                 style="primary"
                 disabled
               >
-                Continue
+                Go to Next Step
               </Button>
             </div>
           </div>

@@ -1,6 +1,6 @@
 <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_111_51)">
-<rect width="80" height="80" rx="20" fill="white"/>
+<rect width="80" height="80" rx="20" fill="#FAFF1E"/>
 <rect x="40" y="89.6875" width="111.562" height="40" transform="rotate(-90 40 89.6875)" fill="#0CE97F"/>
 <rect y="95.3125" width="41.7188" height="40" transform="rotate(-90 0 95.3125)" fill="#EB1E5C"/>
 <path d="M22.0035 22V59C22.0035 63.1659 20.4061 64 16.2906 64C12.1752 64 10.5778 63.1659 10.5778 59V22C10.5778 17.6227 11.9218 16.7273 16.2906 16.7273C20.2645 16.7273 22.0035 17.7461 22.0035 22Z" fill="black"/>

@@ -12,9 +12,9 @@ const stables = [
 ]
 
 const aave = [
-  { protocol: 'Aave', address: '0x6ab707Aca953eDAeFBc4fD23bA73294241490620' },
-  { protocol: 'Aave', address: '0x625E7708f30cA75bfd92586e17077590C60eb4cD' },
-  { protocol: 'Aave', address: '0x82E64f49Ed5EC1bC6e43DAD4FC8Af9bb3A2312EE' },
+  { protocol: 'Aave', address: '0x6ab707Aca953eDAeFBc4fD23bA73294241490620', apy: 11.51 },
+  { protocol: 'Aave', address: '0x625E7708f30cA75bfd92586e17077590C60eb4cD', apy: 2.41 },
+  { protocol: 'Aave', address: '0x82E64f49Ed5EC1bC6e43DAD4FC8Af9bb3A2312EE', apy: 2.89 },
 ]
 
 const yearn = [
@@ -26,6 +26,7 @@ const yearn = [
 type Vault = {
   protocol: string
   address: string
+  apy: number
 }
 
 export const vaults = [
@@ -36,13 +37,16 @@ export const vaults = [
 
 type Response = {
   address: string
+  token: string
   symbol: string
-  tvl: {
-    tvl: number
-  }
-  apy: {
-    gross_apr: number
-    net_apy: number
+  metadata: {
+    tvl: {
+      tvl: number
+    }
+    apy: {
+      gross_apr: number
+      net_apy: number
+    }
   }
 }[]
 
@@ -63,10 +67,11 @@ export const useVaults = () => React.useContext(Context)
 
 export const VaultsProvider = ({ children }) => {
   const fetcher = async () => {
-    const { data } = await axios.get<Response>('https://api.yearn.finance/v1/chains/1/vaults/all')
+    const { data } = await axios.get<Response>('https://cache.yearn.finance/v1/chains/250/vaults/get')
 
     const dataMap = data.reduce((acc, item) => {
-      acc[item.address] = item
+      acc[item.address.toLowerCase()] = item
+      acc[item.token.toLowerCase()] = item
       return acc
     }, {} as Record<string, Response[number]>)
 
@@ -74,10 +79,14 @@ export const VaultsProvider = ({ children }) => {
       vaults.map(async (vault) => {
         const vaultContract = getVaultContract(vault.address)
         const tokenName = await vaultContract.name()
-        const apy = dataMap[vault.address]?.apy?.gross_apr || null
+        let apy = dataMap[vault.address.toLowerCase()]?.metadata?.apy?.gross_apr || null
 
         if (!apy) {
-          console.error(`APY doesn't exist for "${vault.protocol} / ${vault.address}"`)
+          console.error(`APY doesn't exist for "${vault.protocol} / ${vault.address}"`, dataMap[vault.address.toLowerCase()])
+          apy = vault.apy
+        }
+        else {
+          apy = +Number(apy * 100).toFixed(2)
         }
 
         return {

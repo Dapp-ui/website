@@ -1,5 +1,5 @@
 import React from 'react'
-import { useConnectWallet } from '@web3-onboard/react'
+import { useConnectWallet, useSetChain } from '@web3-onboard/react'
 import { Web3Provider } from '@ethersproject/providers'
 import { getFactoryContract } from 'contracts'
 import { useField } from 'formular'
@@ -20,11 +20,14 @@ type Step3Props = {
 
 const Step3: React.FC<Step3Props> = ({ onBack }) => {
   const [ { wallet }, connect ] = useConnectWallet()
+  const [ { connectedChain } ] = useSetChain()
   const [ { vaultsMap, selectedVaultIds, percentageDistribution } ] = useContext()
 
-  const vaults = Object.values(vaultsMap)
+  const chainId = connectedChain?.id ? parseInt(connectedChain?.id) : null
+  const isWrongNetwork = chainId !== 250
 
-  const selectedVaults = selectedVaultIds.map((id) => vaults.find((item) => item.address === id))
+  const vaults = Object.values(vaultsMap)
+  let selectedVaults = selectedVaultIds.map((id) => vaults.find((item) => item.address === id)) as any
 
   const vaultShares = selectedVaults.map(({ address }, index) => {
     const prevValue = percentageDistribution[index - 1] || 0
@@ -32,6 +35,11 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
 
     return currValue - prevValue
   })
+
+  selectedVaults = selectedVaults.map((vault, index) => ({
+    ...vault,
+    share: vaultShares[index],
+  })).sort((a, b) => b.share - a.share)
 
   let totalAPY = percentageDistribution.reduce((acc, value, index) => {
     const { apy } = selectedVaults[index]
@@ -96,19 +104,27 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
       <Text className="mb-80" style="t1" color="gray-20">Check everything and come up with a name and a symbol for your index</Text>
       <div className={s.content}>
         <div>
-          <div className={s.vaults}>
-            {
-              selectedVaults.map(({ protocol, tokenName }, index) => {
+          <table className={s.vaults}>
+            <thead>
+              <tr>
+                <th>Vault</th>
+                <th>Index Share</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                selectedVaults.map(({ protocol, tokenName, share }, index) => {
 
-                return (
-                  <div key={index} className={s.vault}>
-                    <b>{tokenName}</b>
-                    <span>{vaultShares[index]}%</span>
-                  </div>
-                )
-              })
-            }
-          </div>
+                  return (
+                    <tr key={index} className={s.vault}>
+                      <td>{tokenName}</td>
+                      <td>{share}%</td>
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
           <div className={s.totalAPY}>
             <span>Total APY</span> <b>{totalAPY}%</b>
           </div>
