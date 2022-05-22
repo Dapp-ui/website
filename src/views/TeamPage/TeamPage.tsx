@@ -15,7 +15,7 @@ const TeamPage: React.FC = () => {
 
   return (
     <div>
-      <Text className="mb-56 text-center" style="h1">Our Team</Text>
+      <Text className="mb-56 text-center" style="h1" color="gray-40">Our Team</Text>
       <div className={s.items}>
         {
           team.map(({ image, name }) => (

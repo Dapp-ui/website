@@ -8,7 +8,6 @@ import { useField } from 'formular'
 
 import { Button, Input } from 'components/inputs'
 import { Text } from 'components/dataDisplay'
-import { Card } from 'components/layout'
 
 import GoBackButton from '../GoBackButton/GoBackButton'
 import { useContext } from '../../utils/context'
@@ -98,7 +97,7 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
     <>
       <div className="relative">
         <GoBackButton onClick={onBack} />
-        <Text style="h3">3/3. Final Step</Text>
+        <Text style="h3" color="gray-40">3/3. Final Step</Text>
       </div>
       <Text className="mb-80" style="t1" color="gray-20">Check everything and come up with a name and a symbol for your index</Text>
       <div className="flex justify-center">

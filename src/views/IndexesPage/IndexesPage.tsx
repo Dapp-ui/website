@@ -178,9 +178,7 @@ const IndexesPage: NextPage = () => {
 
   return (
     <WidthContainer>
-      <Text className="mb-56" style="h3">
-        Most Profitable Indexes
-      </Text>
+      <Text className="mb-56" style="h3" color="gray-40">Most Profitable Indexes</Text>
       <Table
         className={s.table}
         columns={columns}

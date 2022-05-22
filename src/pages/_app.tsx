@@ -6,6 +6,7 @@ import { SWRConfig } from 'swr'
 import IndexLayout from 'layouts/IndexLayout/IndexLayout'
 import MainLayout from 'layouts/MainLayout/MainLayout'
 import NoSupport from 'components/NoSupport/NoSupport'
+import WalletContainer from 'containers/WalletContainer'
 
 import '../scss/sanitize.scss'
 import '../scss/root.scss'
@@ -38,8 +39,14 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
     return <NoSupport />
   }
 
+  let content = (
+    <MainLayout>
+      <Component {...pageProps} />
+    </MainLayout>
+  )
+
   if ([ '/', '/team' ].includes(router.pathname)) {
-    return (
+    content = (
       <IndexLayout>
         <Component {...pageProps} />
       </IndexLayout>
@@ -47,19 +54,13 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
   }
 
   return (
-    <>
-      {
-        isVisible && (
-          <SWRConfig value={swrContext}>
-            <VaultsProvider>
-              <MainLayout>
-                <Component {...pageProps} />
-              </MainLayout>
-            </VaultsProvider>
-          </SWRConfig>
-        )
-      }
-    </>
+    <SWRConfig value={swrContext}>
+      <WalletContainer>
+        <VaultsProvider>
+          {content}
+        </VaultsProvider>
+      </WalletContainer>
+    </SWRConfig>
   )
 }
 

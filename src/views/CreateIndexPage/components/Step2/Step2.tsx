@@ -91,7 +91,7 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
     <>
       <div className="relative">
         <GoBackButton onClick={onBack} />
-        <Text style="h3">2/3. Setup weights</Text>
+        <Text style="h3" color="gray-40">2/3. Setup weights</Text>
       </div>
       <Text className="mb-80" style="h4" color="gray-20">Setup selected vaults weight</Text>
       <div className="pt-20">

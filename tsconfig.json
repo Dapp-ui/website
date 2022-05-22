@@ -25,6 +25,7 @@
       "helpers": [ "src/helpers" ],
       "layouts/*": [ "src/layouts/*" ],
       "components/*": [ "src/components/*" ],
+      "containers/*": [ "src/containers/*" ],
       "views/*": [ "src/views/*" ],
       "contexts": [ "src/contexts" ],
       "hooks": [ "src/hooks" ],

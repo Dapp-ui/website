@@ -122,9 +122,7 @@ const Step1: React.FC<Step1Props> = ({ onContinue }) => {
 
   return (
     <>
-      <Text className="mb-56" style="h3">
-        1/3. Choose from vaults
-      </Text>
+      <Text className="mb-56" style="h3" color="gray-40">1/3. Choose from vaults</Text>
       <Table
         className={s.table}
         columns={columns}
