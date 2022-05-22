@@ -101,16 +101,17 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
         <Text style="h3">3/3. Final Step</Text>
       </div>
       <Text className="mb-80" style="t1" color="gray-20">Check everything and come up with a name and a symbol for your index</Text>
-      <div className={s.content}>
-        <div>
-          <table className={s.vaults}>
-            <thead>
+      <div className="flex justify-center">
+        <div className={s.content}>
+          <div className={s.info}>
+            <table className={s.vaults}>
+              <thead>
               <tr>
                 <th>Vault</th>
                 <th>Index Share</th>
               </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
               {
                 selectedVaults.map(({ protocol, tokenName, share }, index) => {
 
@@ -122,52 +123,55 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
                   )
                 })
               }
-            </tbody>
-          </table>
-          <div className={s.totalAPY}>
-            <span>Total APY</span> <b>{totalAPY}%</b>
+              </tbody>
+            </table>
+            <div className="px-20">
+              <div className={s.totalAPY}>
+                <span>Total APY</span> <b className="color-brand-90">{totalAPY}%</b>
+              </div>
+            </div>
+          </div>
+          <div className={s.form}>
+            <Text className="mb-24" style="h4">Create Index</Text>
+            <Input
+              size={56}
+              placeholder="Name"
+              field={nameField}
+            />
+            <Input
+              size={56}
+              className="mt-20"
+              placeholder="Symbol"
+              field={symbolField}
+            />
+            <div className="mt-24">
+              {
+                Boolean(wallet) ? (
+                  <Button
+                    size={56}
+                    style="primary"
+                    type="submit"
+                    fullWidth
+                    loading={isSubmitting}
+                    disabled={isWrongNetwork}
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                ) : (
+                  <Button
+                    size={56}
+                    style="primary"
+                    fullWidth
+                    onClick={() => connect({})}
+                  >
+                    Connect wallet
+                  </Button>
+                )
+              }
+            </div>
           </div>
         </div>
-        <Card className={s.form}>
-          <Text className="mb-24" style="h4">Create Index</Text>
-          <Input
-            size={56}
-            placeholder="Name"
-            field={nameField}
-          />
-          <Input
-            size={56}
-            className="mt-20"
-            placeholder="Symbol"
-            field={symbolField}
-          />
-          <div className="mt-24">
-            {
-              Boolean(wallet) ? (
-                <Button
-                  size={56}
-                  style="primary"
-                  type="submit"
-                  fullWidth
-                  loading={isSubmitting}
-                  disabled={isWrongNetwork}
-                  onClick={handleSubmit}
-                >
-                  Submit
-                </Button>
-              ) : (
-                <Button
-                  size={56}
-                  style="primary"
-                  fullWidth
-                  onClick={() => connect({})}
-                >
-                  Connect wallet
-                </Button>
-              )
-            }
-          </div>
-        </Card>
       </div>
     </>
   )

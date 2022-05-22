@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useRanger } from 'react-ranger'
 import { colors } from 'helpers'
 import cx from 'classnames'

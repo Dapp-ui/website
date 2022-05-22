@@ -1,21 +1,33 @@
 .content {
-  display: grid;
-  grid-gap: 100px;
-  align-items: center;
-  justify-content: center;
-  grid-template-columns: 400px 400px;
+  display: flex;
+  padding: 8px;
+  background-color: $bg-80;
+  border-radius: 20px;
+}
+
+.info {
+  width: 400px;
+  padding: 20px 40px 20px 12px;
 }
 
 .totalAPY {
   display: flex;
   justify-content: space-between;
-  margin-top: 40px;
-  padding: 0 22px;
-  font-size: 24px;
+  margin-top: 20px;
+  padding-top: 20px;
+  font-size: 22px;
+  border-top: 1px solid $bg-60;
 
   b {
     font-weight: 700;
   }
+}
+
+.form {
+  width: 400px;
+  padding: 30px;
+  background-color: $bg-70;
+  border-radius: 16px;
 }
 
 .vaults {
@@ -23,11 +35,12 @@
   font-size: 18px;
 
   th {
+    font-weight: 400;
     color: $gray-20;
   }
 
   th, td {
-    padding: 12px 20px;
+    padding: 8px 20px;
 
     &:first-child {
       text-align: left;
