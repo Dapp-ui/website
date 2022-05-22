@@ -3,8 +3,8 @@ import { getIndexContract, getVaultContract, decimals } from 'contracts'
 import type { VaultsContextState } from 'contexts'
 
 
-const fetchIndexData = async (address: string, vaultsMap: VaultsContextState['vaultsMap']) => {
-  const indexContract = getIndexContract(address)
+const fetchIndexData = async (indexAddress: string, vaultsMap: VaultsContextState['vaultsMap']) => {
+  const indexContract = getIndexContract(indexAddress)
 
   const [
     owner,
@@ -54,12 +54,23 @@ const fetchIndexData = async (address: string, vaultsMap: VaultsContextState['va
     }
   }
 
+  const totalWeight = components?.reduce((acc, { targetWeight }) => acc + targetWeight, 0)
+
+  let totalAPY = components.reduce((acc, item) => {
+    const { targetWeight } = item
+
+    return acc + vaultsMap[item.vault].apy * targetWeight / totalWeight
+  }, 0)
+
+  totalAPY = +parseFloat(totalAPY).toFixed(2)
+
   return {
     owner,
-    address,
+    address: indexAddress,
     name,
     symbol,
     components,
+    totalAPY,
     totalPrice,
     totalSupply,
   }

@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import { useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { getFactoryContract, rpcProvider, initialBlocks } from 'contracts'
-import { fetchIndexData, makeBlockRanges } from 'helpers'
+import { fetchIndexData, makeBlockRanges, formatStringNumber } from 'helpers'
 import { useVaults } from 'contexts'
 import { useQuery } from 'hooks'
 
@@ -27,7 +27,7 @@ type RowData = {
     tokenSymbol: string
     targetWeight: string
   }[]
-  apy: number
+  totalAPY: number
   totalPrice: string
 }
 
@@ -106,12 +106,12 @@ const IndexesPage: NextPage = () => {
       {
         id: 'apy',
         Header: 'APY',
-        accessor: ({ apy }) => {
+        accessor: ({ totalAPY }) => {
           if (isFetching) {
             return <Bone w={40} h={16} />
           }
 
-          return apy ? <b>${apy}%</b> : 'N/A'
+          return totalAPY ? <b>{totalAPY}%</b> : 'N/A'
         },
       },
       {
@@ -122,7 +122,7 @@ const IndexesPage: NextPage = () => {
             return <Bone w={107} h={16} />
           }
 
-          return `$${totalPrice}`
+          return `$${formatStringNumber(totalPrice)}`
         },
       },
       {

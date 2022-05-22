@@ -67,6 +67,18 @@ export const useVaults = () => React.useContext(Context)
 
 export const VaultsProvider = ({ children }) => {
   const fetcher = async () => {
+    const cacheKey = 'index-club-vaults-cache'
+    let storageValue = localStorage.getItem(cacheKey)
+
+    if (storageValue) {
+      const { createdAt, data } = JSON.parse(storageValue)
+
+      // less than 10 min
+      if (Date.now() - createdAt < 10 * 60 * 60 * 1000) {
+        return data
+      }
+    }
+
     const { data } = await axios.get<Response>('https://cache.yearn.finance/v1/chains/250/vaults/get')
 
     const dataMap = data.reduce((acc, item) => {
@@ -82,7 +94,7 @@ export const VaultsProvider = ({ children }) => {
         let apy = dataMap[vault.address.toLowerCase()]?.metadata?.apy?.gross_apr || null
 
         if (!apy) {
-          console.error(`APY doesn't exist for "${vault.protocol} / ${vault.address}"`, dataMap[vault.address.toLowerCase()])
+          console.warn(`APY doesn't exist for "${vault.protocol} / ${vault.address}"`, dataMap[vault.address.toLowerCase()])
           apy = vault.apy
         }
         else {
@@ -97,10 +109,14 @@ export const VaultsProvider = ({ children }) => {
       })
     )
 
-    return mappedData.reduce((acc, item) => {
+    const result = mappedData.reduce((acc, item) => {
       acc[item.address] = item
       return acc
     }, {})
+
+    localStorage.setItem(cacheKey, JSON.stringify(result))
+
+    return result
   }
 
   const { isFetching, data } = useQuery({
