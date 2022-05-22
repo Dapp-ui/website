@@ -145,6 +145,10 @@
   color: $gray-20;
 }
 
+.color-gray-10 {
+  color: $gray-10;
+}
+
 .color-brand-90 {
   color: $brand-90;
 }
@@ -301,7 +305,7 @@ $indentMap: (
 
 $autoKeys: ('mt', 'mr', 'mb', 'ml', 'mx', 'my');
 
-$indentSizes: (2, 4, 6, 8, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 60, 64, 72, 80, 96);
+$indentSizes: (2, 4, 6, 8, 10, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 60, 64, 72, 80, 96);
 
 @each $key, $cssProps in $indentMap {
   @each $size in $indentSizes {

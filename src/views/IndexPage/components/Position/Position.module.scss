@@ -6,19 +6,25 @@
 
 .tab {
   margin-left: 20px;
-  padding-bottom: 4px;
+  padding-bottom: 6px;
   border-bottom: 2px solid transparent;
+  color: $bg-20;
+  border-bottom-color: $bg-60;
+  font-size: 16px;
   cursor: pointer;
+  @include basic-transition();
 
   &:first-child {
     margin-left: 0;
   }
 
   &:hover {
-    border-bottom-color: $bg-60;
+    color: $gray-90;
+    border-bottom-color: $gray-80;
   }
 
   &.active {
+    color: $gray-90;
     border-bottom-color: $gray-80;
     cursor: default;
   }

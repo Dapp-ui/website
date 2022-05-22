@@ -186,8 +186,8 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
 
   return (
     <Card>
-      <div className="mb-20">
-        <Text style="p2" color="gray-60">Your position</Text>
+      <div className="mb-36 pt-8">
+        <Text style="p2" color="gray-20">Your position</Text>
         <Text style="h4">
           {
             indexBalance === undefined || indexBalance === null ? (
@@ -199,24 +199,18 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
         </Text>
       </div>
       <div className={s.tabs}>
-        <Text
+        <div
           className={cx(s.tab, { [s.active]: view === 'deposit' })}
-          style="p2"
-          color="gray-90"
-          tag="button"
           onClick={() => setView('deposit')}
         >
           Deposit
-        </Text>
-        <Text
+        </div>
+        <div
           className={cx(s.tab, { [s.active]: view === 'withdraw' })}
-          style="p2"
-          color="gray-90"
-          tag="button"
           onClick={() => setView('withdraw')}
         >
           Withdraw
-        </Text>
+        </div>
       </div>
       <div className="mt-32">
         {
@@ -236,7 +230,7 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
       </div>
       <div className="mt-16">
         <Button
-          size={44}
+          size={56}
           style="primary"
           fullWidth
           loading={isSubmitting}
