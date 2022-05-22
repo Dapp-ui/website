@@ -3,15 +3,12 @@ import Link from 'next/link'
 
 import { WidthContainer } from 'components/layout'
 import { ActiveLink } from 'components/navigation'
-
-import ConnectButton from './components/ConnectButton/ConnectButton'
+import { Button } from 'components/inputs'
 
 import s from './Header.module.scss'
 
 
 const nav = [
-  { title: 'Indexes', link: '/indexes' },
-  { title: 'Create', link: '/create' },
   { title: 'Our Team', link: '/team' },
   { title: 'GitHub', toTab: 'https://github.com/ETHHackathon2022' },
 ]
@@ -48,7 +45,9 @@ const Header: React.FC = () => {
             })
           }
         </div>
-        <ConnectButton />
+        <Button size={44} style="primary" to="/indexes">
+          Go to the App
+        </Button>
       </div>
     </WidthContainer>
   )

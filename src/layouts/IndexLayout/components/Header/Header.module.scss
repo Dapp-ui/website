@@ -1,0 +1,43 @@
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 26px;
+
+  &:any-link {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  img {
+    display: block;
+    width: 44px;
+    margin-right: 12px;
+  }
+}
+
+.nav {
+  display: flex;
+  font-size: 20px;
+
+  a {
+    margin-left: 32px;
+
+    &:any-link {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:hover {
+      color: $brand-60;
+    }
+
+    &.active {
+      color: $brand-70;
+    }
+  }
+}

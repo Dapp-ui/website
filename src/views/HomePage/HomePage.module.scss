@@ -1,0 +1,35 @@
+.content {
+  padding-right: 40%;
+  background-image: url('/images/coins.jpg');
+  background-repeat: no-repeat;
+  background-position: right 0 top 50%;
+  background-size: auto 100%;
+}
+
+.item {
+  margin-top: 56px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.title {
+  margin-bottom: 16px;
+  font-weight: 700;
+  font-size: 32px;
+}
+
+.info {
+  margin-bottom: 24px;
+  font-size: 18px;
+  color: $gray-40;
+
+  p {
+    margin-top: 10px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}

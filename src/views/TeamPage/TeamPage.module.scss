@@ -1,0 +1,28 @@
+.items {
+  display: grid;
+  grid-gap: 56px;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.item {
+  text-align: center;
+}
+
+.image {
+  border: 4px solid $brand-60;
+  overflow: hidden;
+  border-radius: 50%;
+
+  img {
+    display: block;
+    width: 100%;
+  }
+}
+
+.name {
+  margin-top: 20px;
+  font-weight: 700;
+  font-size: 28px;
+}
