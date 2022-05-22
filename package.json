@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run watch-icons & next dev",
-    "build": "npm run build-icons & npm run typechain && next build",
+    "build": "npm run build-icons & npm run typechain && next build && next export",
     "start": "next start",
     "lint": "next lint",
     "typechain": "typechain --target ethers-v5 --out-dir ./src/contracts/types './src/contracts/abis/*.json'",
