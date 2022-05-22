@@ -2,12 +2,13 @@ import React from 'react'
 import { useConnectWallet } from '@web3-onboard/react'
 import { Web3Provider } from '@ethersproject/providers'
 import { getFactoryContract } from 'contracts'
-import { colors } from 'helpers'
 import { useField } from 'formular'
 
 import { Button, Input } from 'components/inputs'
 import { Text } from 'components/dataDisplay'
+import { Card } from 'components/layout'
 
+import GoBackButton from '../GoBackButton/GoBackButton'
 import { useContext } from '../../utils/context'
 
 import s from './Step3.module.scss'
@@ -88,8 +89,11 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
 
   return (
     <>
-      <Text style="h3">3/3. Final Step</Text>
-      <Text className="mb-80" style="h4" color="gray-20">Check everything and come up with a name and a symbol for your index</Text>
+      <div className="relative">
+        <GoBackButton onClick={onBack} />
+        <Text style="h3">3/3. Final Step</Text>
+      </div>
+      <Text className="mb-80" style="t1" color="gray-20">Check everything and come up with a name and a symbol for your index</Text>
       <div className={s.content}>
         <div>
           <div className={s.vaults}>
@@ -97,8 +101,8 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
               selectedVaults.map(({ protocol, tokenName }, index) => {
 
                 return (
-                  <div key={index} className={s.vault} style={{ background: colors[index] }}>
-                    <span>{tokenName}</span>
+                  <div key={index} className={s.vault}>
+                    <b>{tokenName}</b>
                     <span>{vaultShares[index]}%</span>
                   </div>
                 )
@@ -109,7 +113,7 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
             <span>Total APY</span> <b>{totalAPY}%</b>
           </div>
         </div>
-        <div className={s.form}>
+        <Card className={s.form}>
           <Input
             size={56}
             placeholder="Name"
@@ -121,20 +125,14 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
             placeholder="Symbol"
             field={symbolField}
           />
-          <div className="flex justify-between mt-auto">
-            <Button
-              size={56}
-              style="secondary"
-              onClick={onBack}
-            >
-              Go Back
-            </Button>
+          <div className="mt-24">
             {
               Boolean(wallet) ? (
                 <Button
                   size={56}
                   style="primary"
                   type="submit"
+                  fullWidth
                   onClick={handleSubmit}
                 >
                   Create Index
@@ -143,6 +141,7 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
                 <Button
                   size={56}
                   style="primary"
+                  fullWidth
                   onClick={() => connect({})}
                 >
                   Connect wallet
@@ -150,7 +149,7 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
               )
             }
           </div>
-        </div>
+        </Card>
       </div>
     </>
   )

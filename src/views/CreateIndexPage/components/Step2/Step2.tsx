@@ -167,7 +167,7 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
             style="primary"
             onClick={handleContinue}
           >
-            Continue
+            Go to Final Step
           </Button>
         </div>
       </div>

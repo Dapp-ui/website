@@ -37,3 +37,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 /src/contracts/types
+/src/components/ui/Icon/icons.d.ts

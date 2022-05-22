@@ -1,0 +1,16 @@
+.button {
+  position: absolute;
+  top: 6px;
+  left: -52px;
+  width: 34px;
+  height: 34px;
+  color: #fff;
+  background-color: $bg-80;
+  cursor: pointer;
+  border-radius: 100px;
+  @include basic-transition();
+
+  &:hover {
+    background: $bg-70;
+  }
+}

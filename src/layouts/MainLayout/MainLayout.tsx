@@ -1,7 +1,6 @@
 import React from 'react'
 
-import Header from './components/Header/Header'
-import Footer from './components/Footer/Footer'
+import { Header, Footer, Notifications } from './components'
 
 import s from './MainLayout.module.scss'
 
@@ -15,6 +14,7 @@ const MainLayout: React.PropsWithChildren<any> = ({ children }) => {
         {children}
       </main>
       <Footer />
+      <Notifications />
     </div>
   )
 }

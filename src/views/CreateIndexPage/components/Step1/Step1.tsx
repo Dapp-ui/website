@@ -161,7 +161,7 @@ const Step1: React.FC<Step1Props> = ({ onContinue }) => {
               style="primary"
               onClick={handleContinue}
             >
-              Continue
+              Go to Next Step
             </Button>
           </div>
         )
