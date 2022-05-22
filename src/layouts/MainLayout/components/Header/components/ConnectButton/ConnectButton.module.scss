@@ -1,0 +1,8 @@
+.wrongNetworkButton {
+  color: #fff;
+  background-color: $accent-red-90;
+
+  &:hover {
+    background-color: $accent-red-70 !important;
+  }
+}

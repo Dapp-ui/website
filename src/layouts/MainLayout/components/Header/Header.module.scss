@@ -1,6 +1,7 @@
 .logo {
   display: flex;
   align-items: center;
+  font-size: 22px;
 
   &:any-link {
     color: #000;
@@ -9,7 +10,7 @@
 
   img {
     display: block;
-    width: 36px;
+    width: 32px;
     margin-right: 12px;
   }
 }

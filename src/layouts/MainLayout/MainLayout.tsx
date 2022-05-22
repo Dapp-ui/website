@@ -9,7 +9,7 @@ const MainLayout: React.PropsWithChildren<any> = ({ children }) => {
   return (
     <>
       <Header />
-      <main className="mt-40">
+      <main className="mt-80">
         {children}
       </main>
       <Footer />

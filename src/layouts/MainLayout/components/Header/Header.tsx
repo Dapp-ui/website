@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 
-import { Box, Container, Typography } from '@mui/material'
+import { WidthContainer } from 'components/layout'
 import { ActiveLink } from 'components/navigation'
 import { Text } from 'components/dataDisplay'
 
@@ -19,12 +19,12 @@ const nav = [
 const Header: React.FC = () => {
 
   return (
-    <Container maxWidth="lg">
-      <Box pt={2} pb={2} className="flex items-center justify-between">
+    <WidthContainer>
+      <div className="flex items-center justify-between py-20">
         <Link href="/indexes">
           <a className={s.logo}>
             <img src="/images/logo.svg" alt="" />
-            <Text style="h3">IndexClub</Text>
+            <div>IndexClub</div>
           </a>
         </Link>
         <div className={s.nav}>
@@ -43,7 +43,7 @@ const Header: React.FC = () => {
               }
 
               return (
-                <ActiveLink key={title} href={link} activeClassName={s.active}>
+                <ActiveLink key={title} href={link} activeClassName={s.active} exact>
                   <a>
                     {content}
                   </a>
@@ -53,8 +53,8 @@ const Header: React.FC = () => {
           }
         </div>
         <ConnectButton />
-      </Box>
-    </Container>
+      </div>
+    </WidthContainer>
   )
 }
 

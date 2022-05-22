@@ -5,7 +5,7 @@ import { constants } from 'ethers'
 import { Web3Provider } from '@ethersproject/providers'
 import { parseUnits, formatUnits } from '@ethersproject/units'
 import { getTokenContract, getIndexContract, addresses, decimals } from 'contracts'
-import { useConnectWallet } from '@web3-onboard/react'
+import { useConnectWallet, useSetChain } from '@web3-onboard/react'
 import { compare, formatStringNumber } from 'helpers'
 import cx from 'classnames'
 
@@ -18,18 +18,27 @@ import s from './Position.module.scss'
 
 type PositionProps = {
   indexAddress: string
+  totalPrice: string
+  totalSupply: string
 }
 
-const Position: React.FC<PositionProps> = ({ indexAddress }) => {
+const Position: React.FC<PositionProps> = ({ indexAddress, totalPrice, totalSupply }) => {
   const [ { wallet } ] = useConnectWallet()
+  const [ { connectedChain } ] = useSetChain()
   const [ view, setView ] = useState('deposit')
   const [ isSubmitting, setSubmitting ] = useState(false)
 
+  const chainId = connectedChain?.id ? parseInt(connectedChain?.id) : null
   const account = wallet?.accounts?.[0]?.address
+
   const amountField = useField<string>()
   const { value: amount } = useFieldState(amountField)
 
   const approve = async () => {
+    if (!parseFloat(amount)) {
+      return
+    }
+
     try {
       setSubmitting(true)
 
@@ -40,6 +49,10 @@ const Position: React.FC<PositionProps> = ({ indexAddress }) => {
       const receipt = await tokenContract.approve(indexAddress, constants.MaxUint256)
       const txHash = await receipt.wait()
 
+      mutate((state) => ({
+        ...state,
+        allowance: formatUnits(constants.MaxUint256, decimals.token),
+      }))
       setSubmitting(false)
     }
     catch (err) {
@@ -49,6 +62,10 @@ const Position: React.FC<PositionProps> = ({ indexAddress }) => {
   }
 
   const deposit = async () => {
+    if (!parseFloat(amount)) {
+      return
+    }
+
     try {
       setSubmitting(true)
 
@@ -68,6 +85,10 @@ const Position: React.FC<PositionProps> = ({ indexAddress }) => {
   }
 
   const withdraw = async () => {
+    if (!parseFloat(amount)) {
+      return
+    }
+
     try {
       setSubmitting(true)
 
@@ -118,8 +139,8 @@ const Position: React.FC<PositionProps> = ({ indexAddress }) => {
     }
   }
 
-  const { isFetching, data } = useQuery({
-    endpoint: 'approve',
+  const { isFetching, data, mutate } = useQuery({
+    endpoint: 'position',
     fetcher,
     skip: !account,
   })
@@ -129,9 +150,11 @@ const Position: React.FC<PositionProps> = ({ indexAddress }) => {
   const isZeroAmount = !parseFloat(amount)
   const isInsufficientBalance = compare(amount, '>', balance)
   const isApproveRequired = compare(amount, '>', allowance)
+  const isWrongNetwork = chainId !== 250
 
   const maxValue = (view === 'deposit' ? balance : indexBalance) || '0'
   const inputErrorLabel = isInsufficientBalance ? 'Insufficient balance' : null
+  const userBalanceInUSD = Number(parseFloat(indexBalance) * parseFloat(totalPrice) / parseFloat(totalSupply)).toFixed(2)
 
   let buttonTitle
   let buttonAction
@@ -151,33 +174,14 @@ const Position: React.FC<PositionProps> = ({ indexAddress }) => {
 
   return (
     <Card>
-      <div className="flex items-center justify-between mb-20">
-        {
-          Boolean(indexBalance) ? (
-            view === 'deposit' ? (
-              <div>
-                <Text style="p2" color="gray-60">Your balance</Text>
-                <Text style="h4">{formatStringNumber(balance)} fUSDT</Text>
-              </div>
-            ) : (
-              <div>
-                <Text style="p2" color="gray-60">Your position</Text>
-                <Text style="h4">{formatStringNumber(indexBalance, 15)} {indexSymbol}</Text>
-              </div>
-            )
-          ) : (
-            <Text style="p1">Start earning on<br />indexes today</Text>
-          )
-        }
-        <div className="text-right">
-          <Text style="p2" color="gray-60">APR</Text>
-          <Text style="h4">20%</Text>
-        </div>
+      <div className="mb-20">
+          <Text style="p2" color="gray-60">Your position</Text>
+          <Text style="h4">{formatStringNumber(indexBalance, 15)} {indexSymbol} <span className="color-gray-60">(${userBalanceInUSD})</span></Text>
       </div>
       <div className={s.tabs}>
         <Text
           className={cx(s.tab, { [s.active]: view === 'deposit' })}
-          style="c2"
+          style="p2"
           color="gray-90"
           tag="button"
           onClick={() => setView('deposit')}
@@ -186,7 +190,7 @@ const Position: React.FC<PositionProps> = ({ indexAddress }) => {
         </Text>
         <Text
           className={cx(s.tab, { [s.active]: view === 'withdraw' })}
-          style="c2"
+          style="p2"
           color="gray-90"
           tag="button"
           onClick={() => setView('withdraw')}
@@ -195,6 +199,11 @@ const Position: React.FC<PositionProps> = ({ indexAddress }) => {
         </Text>
       </div>
       <div className="mt-32">
+        {
+          view === 'deposit' && (
+            <Text className="mb-8" style="p3" color="gray-60">Your balance: <b>{formatStringNumber(balance)} fUSDT</b></Text>
+          )
+        }
         <AmountInput
           field={amountField}
           maxValue={maxValue}
@@ -203,13 +212,13 @@ const Position: React.FC<PositionProps> = ({ indexAddress }) => {
           placeholder="0.00"
         />
       </div>
-      <div className="mt-32">
+      <div className="mt-16">
         <Button
           size={44}
           style="primary"
           fullWidth
           loading={isSubmitting}
-          disabled={!account || isZeroAmount || isFetching}
+          disabled={!account || isWrongNetwork || isFetching}
           onClick={buttonAction}
         >
           {buttonTitle}

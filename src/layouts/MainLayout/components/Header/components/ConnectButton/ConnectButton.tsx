@@ -7,6 +7,10 @@ import { RPC_PROVIDER } from 'contracts'
 
 import { Button } from 'components/inputs'
 
+import s from './ConnectButton.module.scss'
+
+
+const allowedChainIds = [ 250 ]
 
 const injected = injectedModule()
 const coinbaseWalletSdk = coinbaseWalletModule({ darkMode: false })
@@ -45,6 +49,8 @@ const ConnectButton: React.FC = () => {
   const [ { wallet, connecting }, connect, disconnect ] = useConnectWallet()
   const [ { chains, connectedChain, settingChain }, setChain ] = useSetChain()
   const connectedWallets = useWallets()
+
+  const chainId = connectedChain?.id ? parseInt(connectedChain?.id) : null
 
   useEffect(() => {
     const walletsSub = web3Onboard.state.select('wallets')
@@ -90,6 +96,59 @@ const ConnectButton: React.FC = () => {
       }
     })()
   }, [])
+
+  if (chainId && !allowedChainIds.includes(chainId)) {
+    const changeNetwork = async () => {
+      const hexChainId = `0x${Number(250).toString(16)}`
+
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [
+            {
+              chainId: hexChainId,
+            },
+          ],
+        })
+
+        setChain({ chainId: hexChainId })
+      }
+      catch (err) {
+        console.error(err)
+
+        // This error code indicates that the chain has not been added to MetaMask.
+        if (err.code === 4902 || err.data?.originalError?.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [ {
+                chainId: hexChainId,
+                chainName: 'Fantom Opera',
+                nativeCurrency: { name: 'FTM', symbol: 'FTM', decimals: 18 },
+                rpcUrls: [ 'https://rpc.ftm.tools' ],
+                blockExplorerUrls: [ 'https://ftmscan.com' ],
+              } ],
+            })
+
+            setChain({ chainId: hexChainId })
+          }
+          catch {
+            console.error(`failed to add "${chainId}" chain to a wallet.`)
+          }
+        }
+      }
+    }
+
+    return (
+      <Button
+        className={s.wrongNetworkButton}
+        size={32}
+        onClick={changeNetwork}
+      >
+        Wrong network
+      </Button>
+    )
+  }
 
   if (wallet) {
     return (
