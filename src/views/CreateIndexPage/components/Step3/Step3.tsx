@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
+import { openNotification } from '@locmod/notifications'
 import { useConnectWallet, useSetChain } from '@web3-onboard/react'
 import { Web3Provider } from '@ethersproject/providers'
 import { getFactoryContract } from 'contracts'
@@ -19,9 +21,11 @@ type Step3Props = {
 }
 
 const Step3: React.FC<Step3Props> = ({ onBack }) => {
+  const router = useRouter()
   const [ { wallet }, connect ] = useConnectWallet()
   const [ { connectedChain } ] = useSetChain()
   const [ { vaultsMap, selectedVaultIds, percentageDistribution } ] = useContext()
+  const [ isSubmitting, setSubmitting ] = useState(false)
 
   const chainId = connectedChain?.id ? parseInt(connectedChain?.id) : null
   const isWrongNetwork = chainId !== 250
@@ -58,9 +62,7 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
     return Promise.resolve(true)
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-
+  const handleSubmit = async () => {
     const name = nameField.state.value
     const symbol = symbolField.state.value
 
@@ -68,31 +70,42 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
       return
     }
 
-    const provider = new Web3Provider(wallet.provider)
-    const factoryContract = getFactoryContract(provider.getSigner() as any)
+    try {
+      setSubmitting(true)
 
-    const components = (
-      selectedVaultIds
-        .map((id) => vaults.find((item) => item.address === id))
-        .map(({ address }, index) => {
-          const prevValue = percentageDistribution[index - 1] || 0
-          const currValue = index === selectedVaultIds.length - 1 ? 100 : percentageDistribution[index]
-          let targetWeight = currValue - prevValue
+      const provider = new Web3Provider(wallet.provider)
+      const factoryContract = getFactoryContract(provider.getSigner() as any)
 
-          return {
-            vault: address,
-            targetWeight,
-          }
-        })
-    )
+      const components = (
+        selectedVaultIds
+          .map((id) => vaults.find((item) => item.address === id))
+          .map(({ address }, index) => {
+            const prevValue = percentageDistribution[index - 1] || 0
+            const currValue = index === selectedVaultIds.length - 1 ? 100 : percentageDistribution[index]
+            let targetWeight = currValue - prevValue
 
-    console.log('data:', {
-      name,
-      symbol,
-      components,
-    })
+            return {
+              vault: address,
+              targetWeight,
+            }
+          })
+      )
 
-    factoryContract.createIndex(name, symbol, components)
+      const receipt = await factoryContract.createIndex(name, symbol, components)
+      const txHash = await receipt.wait()
+
+      setSubmitting(false)
+      openNotification('info', {
+        title: 'Success!',
+        text: 'Your index was successfully created!',
+      })
+      router.push('/indexes') // TODO push to index page - added on 5/22/22 by pavelivanov
+    }
+    catch (err) {
+      console.error(err)
+      setSubmitting(false)
+      openNotification('error')
+    }
   }
 
   return (
@@ -130,6 +143,7 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
           </div>
         </div>
         <Card className={s.form}>
+          <Text className="mb-24" style="h4">Create Index</Text>
           <Input
             size={56}
             placeholder="Name"
@@ -149,9 +163,11 @@ const Step3: React.FC<Step3Props> = ({ onBack }) => {
                   style="primary"
                   type="submit"
                   fullWidth
+                  loading={isSubmitting}
+                  disabled={isWrongNetwork}
                   onClick={handleSubmit}
                 >
-                  Create Index
+                  Submit
                 </Button>
               ) : (
                 <Button

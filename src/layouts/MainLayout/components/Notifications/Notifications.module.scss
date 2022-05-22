@@ -1,23 +1,23 @@
 .notifications {
   position: fixed;
   z-index: $layer-modal + 1;
-  margin-top: -16rem;
+  margin-top: -16px;
 }
 
 
 @include mobile {
 
   .notifications {
-    right: 16rem;
-    bottom: 16rem;
-    left: 16rem;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
   }
 }
 
 @include desktop {
 
   .notifications {
-    bottom: 24rem;
-    left: 24rem;
+    bottom: 24px;
+    left: 24px;
   }
 }

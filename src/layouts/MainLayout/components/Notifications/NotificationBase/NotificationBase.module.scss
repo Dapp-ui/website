@@ -1,12 +1,12 @@
 .notification {
   position: relative;
   z-index: 2;
-  margin-top: 16rem;
-  padding: 12rem 32rem 20rem 16rem;
+  margin-top: 16px;
+  padding: 16px 32px 16px 16px;
   color: #fff;
-  background-color: #2A3039;
-  border: 1rem solid black;
-  border-radius: 8rem;
+  background-color: #191339;
+  border: 1px solid #352596;
+  border-radius: 8px;
   animation: openNotification 0.3s ease-in-out;
 
   &.closed {
@@ -18,11 +18,15 @@
 
 .closeButton {
   position: absolute;
-  top: 16rem;
-  right: 16rem;
+  top: 16px;
+  right: 16px;
   z-index: 3;
-  color: #fff;
+  color: $gray-20;
   cursor: pointer;
+
+  &:hover {
+    color: $gray-40;
+  }
 }
 
 
@@ -36,8 +40,8 @@
 @include desktop {
 
   .notification {
-    min-width: 320rem;
-    max-width: 400rem;
+    min-width: 320px;
+    max-width: 400px;
   }
 }
 

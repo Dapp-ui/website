@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useQuery } from 'hooks'
 import { useField, useFieldState } from 'formular'
 import { constants } from 'ethers'
+import { openNotification } from '@locmod/notifications'
 import { Web3Provider } from '@ethersproject/providers'
 import { parseUnits, formatUnits } from '@ethersproject/units'
 import { getTokenContract, getIndexContract, addresses, decimals } from 'contracts'
@@ -15,6 +16,13 @@ import { Card } from 'components/layout'
 
 import s from './Position.module.scss'
 
+
+const openSuccessTxNotification = () => {
+  openNotification('info', {
+    title: 'Success!',
+    text: 'The transaction was successfully executed.',
+  })
+}
 
 type PositionProps = {
   indexAddress: string
@@ -54,11 +62,14 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
         ...state,
         allowance: formatUnits(constants.MaxUint256, decimals.token),
       }))
+
       setSubmitting(false)
+      openSuccessTxNotification()
     }
     catch (err) {
       console.error(err)
       setSubmitting(false)
+      openNotification('error')
     }
   }
 
@@ -78,10 +89,12 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
       const txHash = await receipt.wait()
 
       setSubmitting(false)
+      openSuccessTxNotification()
     }
     catch (err) {
       console.error(err)
       setSubmitting(false)
+      openNotification('error')
     }
   }
 
@@ -102,6 +115,7 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
       const txHash = await receipt.wait()
 
       setSubmitting(false)
+      openSuccessTxNotification()
     }
     catch (err) {
       console.error(err)

@@ -8,7 +8,7 @@ import s from './Notifications.module.scss'
 
 
 export const templates = {
-  'plain': PlainNotification,
+  'info': PlainNotification,
   'error': ErrorNotification,
 } as const
 
