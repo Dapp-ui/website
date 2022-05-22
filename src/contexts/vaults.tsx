@@ -36,6 +36,7 @@ export const VaultsProvider = ({ children }) => {
       }
     }
 
+    // same can be fetched with "https://cache.yearn.finance/v1/chains/250/vaults/get"
     const data = await yearnSdk.vaults.get()
 
     const dataMap = data.reduce((acc, item) => {
