@@ -96,13 +96,13 @@ const IndexPage: NextPage<IndexPageProps> = ({ address }) => {
               ) : (
                 <div className="mt-20">
                   {
-                    components.map(({ protocol, vault: address, tokenSymbol, targetWeight }, index) => {
+                    components.map(({ protocol, vault: address, tokenName, targetWeight }, index) => {
                       const share = parseFloat(Number(targetWeight / totalWeight * 100).toFixed(2))
 
                       return (
                         <div key={index} className={s.item}>
                           <div className={s.square} style={{ background: colors[index] }} />
-                          <Text className={s.title} style="p1">{tokenSymbol}&nbsp;&nbsp;&nbsp;<span className="color-gray-20">{share}%</span></Text>
+                          <Text className={s.title} style="p1">{tokenName}&nbsp;&nbsp;&nbsp;<span className="color-gray-20">{share}%</span></Text>
                         </div>
                       )
                     })

@@ -1,0 +1,156 @@
+.trackContainer {
+  margin: 80px -8px 0;
+}
+
+.track {
+
+}
+
+.segments {
+  height: 80px;
+}
+
+.segment {
+  position: relative;
+  height: 100%;
+  padding: 0 8px;
+
+  &.disabled {
+
+    .segmentBg {
+      opacity: 0.4;
+    }
+  }
+}
+
+.segmentBg {
+  height: 100%;
+  border-radius: 8px;
+}
+
+.segmentValue {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  font-size: 24px;
+  transform: translateX(-50%);
+}
+
+.handle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 20px;
+  border-radius: 3px;
+  cursor: move;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  &::before {
+    display: block;
+    width: 5px;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+    height: 100%;
+    content: '';
+  }
+
+  &.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+
+.items {
+  margin-left: -4px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  max-width: 300px;
+  margin-top: 8px;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 8px;
+  user-select: none;
+  @include basic-transition();
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:hover {
+    background-color: $bg-80;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+}
+
+.square {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  border: 3px solid;
+  border-radius: 8px;
+
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    margin: auto;
+    display: block;
+    background: currentColor;
+    opacity: 0;
+    border-radius: 2px;
+    content: '';
+  }
+
+  .active & {
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  .disabled & {
+    opacity: 0.3;
+  }
+}
+
+.title {
+  width: 250px;
+  font-size: 18px;
+}
+
+
+.total {
+  display: flex;
+  padding: 6px;
+  background-color: $bg-80;
+  border-radius: 20px;
+}
+
+.totalAPR {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  margin-right: 8px;
+  padding: 0 20px;
+  font-size: 18px;
+
+  span {
+    padding-left: 8px;
+    font-weight: 700;
+    color: $brand-90;
+  }
+}

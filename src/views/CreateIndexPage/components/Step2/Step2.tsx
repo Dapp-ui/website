@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
-import React, { useState } from 'react'
-import { useRanger } from 'react-ranger'
+import React from 'react'
+import { useCustomRanger, getInitialValues, getSharesFromValues, getValuesFromShares } from 'hooks'
 import { colors } from 'helpers'
 import cx from 'classnames'
 
@@ -13,35 +13,6 @@ import { useContext } from '../../utils/context'
 import s from './Step2.module.scss'
 
 
-// [ 20, 30, 50 ] => [ 20, 50 ]
-const getValuesFromShares = (initialShares: number[]) => {
-  let prevValue = 0
-  return initialShares.slice(0, -1).map((share) => prevValue += share)
-}
-
-const getInitialValues = (count: number) => {
-  const minValue = Math.floor(100 / count - 1)
-  let currValue = 0
-
-  return Array.from(Array(count - 1).keys()).map(() => {
-    const value = currValue += minValue
-
-    if (value > 100) {
-      return 100 - currValue
-    }
-
-    return value
-  })
-}
-
-// [ 20, 50 ] => [ 20, 30, 50 ]
-const getSharesFromValues = (values: number[]) => {
-  return values.concat(100).map((value, index) => {
-    const prevValue = values[index - 1] || 0
-    return value - prevValue
-  })
-}
-
 type Step2Props = {
   onBack: () => void
   onContinue: () => void
@@ -52,26 +23,19 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
 
   const initialValues = initialShares ? getValuesFromShares(initialShares) : getInitialValues(selectedVaultIds.length)
 
-  const [ values, setValues ] = useState(initialValues)
-
-  const { getTrackProps, segments, handles } = useRanger({
-    min: 0,
-    max: 100,
-    stepSize: 1,
-    values,
-    onDrag: setValues,
-  })
+  const [ state, setValues ] = useCustomRanger(initialValues)
+  const { values, getTrackProps, segments, handles } = state
 
   const selectedVaults = selectedVaultIds.map((address) => vaultsMap[address])
   const shares = getSharesFromValues(values)
 
-  let totalAPR = shares.reduce((acc, value, index) => {
+  let totalAPR: any = shares.reduce((acc, value, index) => {
     const { apy } = selectedVaults[index]
 
     return acc += apy * value / 100
   }, 0)
 
-  totalAPR = totalAPR ? +Number(totalAPR).toFixed(2) : totalAPR
+  totalAPR = totalAPR ? Number(totalAPR).toFixed(2) : totalAPR
 
   const handleRemove = (index) => {
     setContextState(({ selectedVaultIds }) => ({
@@ -93,7 +57,7 @@ const Step2: React.FC<Step2Props> = ({ onBack, onContinue }) => {
         <GoBackButton onClick={onBack} />
         <Text style="h3" color="gray-40">2/3. Setup weights</Text>
       </div>
-      <Text className="mb-80" style="h4" color="gray-20">Setup selected vaults weight</Text>
+      <Text className="mb-80" style="t1" color="gray-20">Setup selected vaults weight</Text>
       <div className="pt-20">
         <div className={s.track} {...getTrackProps()}>
           <div className={s.segments}>

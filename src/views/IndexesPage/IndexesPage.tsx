@@ -31,7 +31,7 @@ type RowData = {
   components: {
     protocol: string
     vault: string
-    tokenSymbol: string
+    tokenName: string
     targetWeight: string
   }[]
   totalAPY: number
@@ -124,8 +124,8 @@ const IndexesPage: NextPage = () => {
           return (
             <div className="flex">
               {
-                components.map(({ tokenSymbol }) => (
-                  <div key={tokenSymbol} className={s.tag}>{tokenSymbol}</div>
+                components.map(({ tokenName }) => (
+                  <div key={tokenName} className={s.tag}>{tokenName}</div>
                 ))
               }
             </div>
