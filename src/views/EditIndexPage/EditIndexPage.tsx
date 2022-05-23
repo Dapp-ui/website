@@ -162,6 +162,8 @@ const Content: React.FC<any> = ({ indexAddress, data }) => {
       const provider = new Web3Provider(wallet.provider)
       const indexContract = getIndexContract(indexAddress, provider.getSigner() as any)
 
+      console.log('Submit with values:', values)
+
       const [ od, oi, shareNum, shareDenom, adjustWeight ] = values
 
       const receipt = await indexContract.rebalanceFromTo(od, oi, shareNum, shareDenom, adjustWeight)

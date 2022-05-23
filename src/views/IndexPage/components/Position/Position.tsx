@@ -166,7 +166,7 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
 
   const maxValue = (view === 'deposit' ? balance : indexBalance) || '0'
   const inputErrorLabel = isInsufficientBalance ? 'Insufficient balance' : null
-  const userBalanceInUSD = Number(parseFloat(indexBalance) * parseFloat(totalPrice) / parseFloat(totalSupply)).toFixed(2)
+  const userBalanceInUSD = indexBalance && totalPrice && totalSupply ? +(parseFloat(indexBalance) * parseFloat(totalPrice) / parseFloat(totalSupply)).toFixed(2) : 0
 
   let buttonTitle
   let buttonAction
