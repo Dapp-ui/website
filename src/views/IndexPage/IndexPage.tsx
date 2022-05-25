@@ -46,13 +46,19 @@ const IndexPage: NextPage<IndexPageProps> = ({ address }) => {
         <div className="pt-32">
           {
             isFetching ? (
-              <div className="py-12">
-                <Bone w={354} h={24} />
+              <div>
+                <div className="py-12">
+                  <Bone w={354} h={24} />
+                </div>
+                <div className="py-12">
+                  <Bone w={220} h={24} />
+                </div>
               </div>
             ) : (
-              <Text style="h3" color="gray-60">
-                <span className="color-brand-90">{symbol}</span> <span className="color-gray-10">/ {name}</span> (APR {totalAPY}%)
-              </Text>
+              <div>
+                <Text style="h3" color="brand-90"><span className="color-gray-60 font-regular">{name} /</span> {symbol}</Text>
+                <Text style="h3" color="brand-90"><span className="color-gray-60 font-regular">APR /</span> {totalAPY}%</Text>
+              </div>
             )
           }
           <div className="mt-40">
@@ -132,7 +138,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ address }) => {
         <div>
           <Position
             indexAddress={address}
-            indexSymbol={symbol}
             totalPrice={totalPrice}
             totalSupply={totalSupply}
           />

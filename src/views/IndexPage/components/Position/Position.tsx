@@ -17,6 +17,69 @@ import { Card } from 'components/layout'
 import s from './Position.module.scss'
 
 
+const useAllowance = (indexAddress: string, account: string) => {
+  const fetcher = async () => {
+    const tokenContract = getTokenContract()
+
+    const rawAllowance = await tokenContract.allowance(account, indexAddress)
+
+    return formatUnits(rawAllowance, decimals.token)
+  }
+
+  const { isFetching, data, mutate } = useQuery({
+    endpoint: 'allowance',
+    fetcher,
+    skip: !account,
+  })
+
+  return {
+    isAllowanceFetching: isFetching,
+    allowance: data,
+    mutateAllowance: mutate,
+  }
+}
+
+const useBalance = (indexAddress: string, account: string) => {
+  const fetcher = async () => {
+    const indexContract = getIndexContract(indexAddress)
+    const tokenContract = getTokenContract()
+
+    const [
+      indexSymbol,
+      indexDecimals,
+      rawIndexBalance,
+      rawBalance,
+    ] = await Promise.all([
+      indexContract.symbol(),
+      indexContract.decimals(),
+      indexContract.balanceOf(account),
+      tokenContract.balanceOf(account),
+    ])
+
+    const indexBalance = formatUnits(rawIndexBalance, indexDecimals)
+    const balance = formatUnits(rawBalance, decimals.token)
+
+    return {
+      indexSymbol,
+      indexDecimals,
+      indexBalance,
+      balance,
+    }
+  }
+
+  const { isFetching, data, mutate } = useQuery({
+    endpoint: 'balance',
+    fetcher,
+    skip: !account,
+  })
+
+  return {
+    isBalanceFetching: isFetching,
+    balanceData: data,
+    mutateBalance: mutate,
+  }
+}
+
 const openSuccessTxNotification = () => {
   openNotification('info', {
     title: 'Success!',
@@ -26,12 +89,11 @@ const openSuccessTxNotification = () => {
 
 type PositionProps = {
   indexAddress: string
-  indexSymbol: string
   totalPrice: string
   totalSupply: string
 }
 
-const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPrice, totalSupply }) => {
+const Position: React.FC<PositionProps> = ({ indexAddress, totalPrice, totalSupply }) => {
   const [ { wallet } ] = useConnectWallet()
   const [ { connectedChain } ] = useSetChain()
   const [ view, setView ] = useState('deposit')
@@ -39,6 +101,9 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
 
   const chainId = connectedChain?.id ? parseInt(connectedChain?.id) : null
   const account = wallet?.accounts?.[0]?.address
+
+  const { isAllowanceFetching, allowance, mutateAllowance } = useAllowance(indexAddress, account)
+  const { isBalanceFetching, balanceData, mutateBalance } = useBalance(indexAddress, account)
 
   const amountField = useField<string>()
   const { value: amount } = useFieldState(amountField)
@@ -58,10 +123,7 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
       const receipt = await tokenContract.approve(indexAddress, constants.MaxUint256)
       const txHash = await receipt.wait()
 
-      mutate((state) => ({
-        ...state,
-        allowance: formatUnits(constants.MaxUint256, decimals.token),
-      }))
+      mutateAllowance(() => formatUnits(constants.MaxUint256, decimals.token))
 
       setSubmitting(false)
       openSuccessTxNotification()
@@ -89,7 +151,9 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
       const txHash = await receipt.wait()
 
       setSubmitting(false)
+      mutateBalance()
       openSuccessTxNotification()
+      amountField.set('')
     }
     catch (err) {
       console.error(err)
@@ -115,7 +179,9 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
       const txHash = await receipt.wait()
 
       setSubmitting(false)
+      mutateBalance()
       openSuccessTxNotification()
+      amountField.set('')
     }
     catch (err) {
       console.error(err)
@@ -123,41 +189,7 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
     }
   }
 
-  const fetcher = async () => {
-    const indexContract = getIndexContract(indexAddress)
-    const tokenContract = getTokenContract()
-
-    const [
-      indexDecimals,
-      rawIndexBalance,
-      rawBalance,
-      rawAllowance,
-    ] = await Promise.all([
-      indexContract.decimals(),
-      indexContract.balanceOf(account),
-      tokenContract.balanceOf(account),
-      tokenContract.allowance(account, indexAddress),
-    ])
-
-    const indexBalance = formatUnits(rawIndexBalance, indexDecimals)
-    const balance = formatUnits(rawBalance, decimals.token)
-    const allowance = formatUnits(rawAllowance, decimals.token)
-
-    return {
-      indexDecimals,
-      indexBalance,
-      balance,
-      allowance,
-    }
-  }
-
-  const { isFetching, data, mutate } = useQuery({
-    endpoint: 'position',
-    fetcher,
-    skip: !account,
-  })
-
-  const { indexDecimals, indexBalance, balance, allowance } = data || {}
+  const { indexSymbol, indexDecimals, indexBalance, balance } = balanceData || {}
 
   const isZeroAmount = !parseFloat(amount)
   const isInsufficientBalance = compare(amount, '>', balance)
@@ -193,7 +225,7 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
             indexBalance === undefined || indexBalance === null ? (
               <>N/A</>
             ) : (
-              <>{formatStringNumber(indexBalance, 15)} {indexSymbol} <span className="color-gray-60">(${userBalanceInUSD})</span></>
+              <>{formatStringNumber(indexBalance, 15)} {indexSymbol} <span className="color-brand-90">(${userBalanceInUSD})</span></>
             )
           }
         </Text>
@@ -234,7 +266,7 @@ const Position: React.FC<PositionProps> = ({ indexAddress, indexSymbol, totalPri
           style="primary"
           fullWidth
           loading={isSubmitting}
-          disabled={!account || isWrongNetwork || isFetching}
+          disabled={!account || isWrongNetwork || isAllowanceFetching || isBalanceFetching}
           onClick={buttonAction}
         >
           {buttonTitle}

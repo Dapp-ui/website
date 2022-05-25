@@ -17,6 +17,7 @@ export const styles = [
 ] as const
 
 export const colors = [
+  'brand-90',
   'brand-70',
   'brand-50',
   'gray-90',
